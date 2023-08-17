@@ -4,55 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Your Name - Portfolio</title>
+    <title>Solar System Website</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="container">
-                <h1>Your Name</h1>
-                <ul>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+    <div class="solar-system">
+    <a href="index.html">
+      <div id="sun"></div>
+    </a>
 
-    <section id="hero">
-        <div class="container">
-            <h2>Welcome to My Portfolio</h2>
-            <p>Showcasing my passion for space and programming</p>
-        </div>
-    </section>
+  <div class="orbit mercury-orbit"></div>
+  <div class="mercury-spin">
+    <div id="mercury"></div>
+  </div>
 
-    <section id="about">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>Write a brief introduction about yourself and your passion for space and programming.</p>
-        </div>
-    </section>
+  <div class="orbit venus-orbit"></div>
+  <div class="venus-spin">
+    <div id="venus"></div>
+  </div>
 
-    <section id="projects">
-        <div class="container">
-            <h2>Projects</h2>
-            <!-- Add your project cards here -->
-        </div>
-    </section>
+  <div class="orbit earth-orbit"></div>
+  <div class="earth-spin">
+    <div class="orbit moon-orbit"></div>
+    <div class="moon-spin">
+      <div id="moon"></div>
+    </div>
+       <a href="about.html" class="planet-link">
+                <div id="earth"></div>
+        </a>
+  </div>
 
-    <section id="contact">
-        <div class="container">
-            <h2>Contact Me</h2>
-            <!-- Add contact form or contact information here -->
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Your Name. All rights reserved.</p>
-        </div>
-    </footer>
+  <div class="orbit mars-orbit"></div>
+  <div class="mars-spin">
+    <div id="mars"></div>
+  </div>
+</div>
+    <script src="script.js"></script>
 </body>
 </html>
 
