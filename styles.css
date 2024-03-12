@@ -1,17 +1,20 @@
 body {
-  background-color: #f8f8f8;
-  color: #333333;
   font-family: monospace;
   font-size: 12px;
   margin: 5;
   padding: 5;
+  transition: background-color 0.3s ease;
+  background-color: #f8f8f8;
 }
 
 h1, h2, h3, h4, h5, h6 {
 
   color: #222222;
   font-weight: bold;
-  margin: 0;
+}
+
+h2 {
+  font-size: 22px;
 }
 
 p {
@@ -20,10 +23,38 @@ p {
 }
 
 a {
-  color: #333333;
+  color: #213f71;
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+.navbar {
+  padding: 10px 0;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.navbar ul li {
+  display: inline;
+}
+
+.navbar ul li a {
+  color: #213f71;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.container {
+  width: 75%; /* Adjust the width as needed */
+  margin: 0 auto; /* This centers the container horizontally */
+  text-align: left; /* This centers the text inside the container */
+  padding: 20px; /* Add padding to create space around the text */
 }
