@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimal Route Finder</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeVH2J9UofYSwetEqCcfnb1pJ_C3hmH84&libraries=places"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4A90E2;
+        }
+
+        #appContainer {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #appContainer img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        #addressFields {
+            margin-top: 20px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 120px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            display: inline-block;
+        }
+
+        .addressGroup {
+            display: flex;
+            align-items: center;
+        }
+
+        .removeBtn {
+            background-color: #FF5B5B;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #addAddressBtn, #getRouteBtn {
+            background-color: #4A90E2;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        #getRouteBtn {
+            background-color: #52C41A;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        #map {
+            margin-top: 20px;
+            height: 400px;
+            width: 100%;
+            border: 1px solid #ccc;
+        }
+
+        button:disabled {
+            background-color: #bbb;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div id="appContainer">
+        <img src="logo.jpg" alt="logo" style="width: 250px; height: 100px;">
+        <h1>Optimal Route Finder</h1>
+        <p>Please enter the addresses for the delivery route:</p>
+        <p>Format: Address, City, State Zipcode</p>
+
+        <div class="addressGroup">
+            <input type="text" id="startingAddress" value="325 Almond St SW, De Motte, IN 46310">
+        </div>
+
+        <div id="addressFields">
+            <div class="addressGroup">
+                <input type="text" id="address1" placeholder="Address 1">
+                <button class="removeBtn" onclick="removeAddress(1)" style="display:none;">Remove</button>
+            </div>
+        </div>
+
+        <button id="addAddressBtn">Add Destination</button>
+        <button id="getRouteBtn" onclick="findOptimalRoute()">Get Optimal Route</button>
+
+        <div id="results"></div>
+        <div id="map"></div>
+    </div>
+
+    <script>
+        let map, directionsService, directionsRenderer;
+        let addressCount = 1;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 10,
+                center: { lat: 41.199990, lng: -87.199760 },
+            });
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            // Initialize autocomplete for starting address
+            new google.maps.places.Autocomplete(document.getElementById('startingAddress'));
+
+            // Initialize autocomplete for first address
+            new google.maps.places.Autocomplete(document.getElementById('address1'));
+        }
+
+        // Add more address input fields
+        document.getElementById('addAddressBtn').addEventListener('click', function () {
+            if (addressCount < 4) {
+                addressCount++;
+                const addressFields = document.getElementById('addressFields');
+                const newAddressGroup = document.createElement('div');
+                newAddressGroup.className = 'addressGroup';
+                newAddressGroup.innerHTML = `
+                    <input type="text" id="address${addressCount}" placeholder="Address ${addressCount}">
+                    <button class="removeBtn" onclick="removeAddress(${addressCount})">Remove</button>
+                `;
+                addressFields.appendChild(newAddressGroup);
+
+                // Add autocomplete to the new input field
+                new google.maps.places.Autocomplete(document.getElementById(`address${addressCount}`));
+
+                if (addressCount === 4) {
+                    this.disabled = true; // Disable "Add Destination" button when 4 addresses are reached
+                }
+            }
+        });
+
+        // Remove an address field
+        function removeAddress(id) {
+            const addressGroup = document.getElementById(`address${id}`).parentNode;
+            addressGroup.remove();
+            addressCount--;
+
+            if (addressCount < 4) {
+                document.getElementById('addAddressBtn').disabled = false; // Enable "Add Destination" button
+            }
+        }
+
+        // Get the distance matrix
+        function getDistanceMatrix(addresses) {
+            return new Promise((resolve, reject) => {
+                const service = new google.maps.DistanceMatrixService();
+                service.getDistanceMatrix({
+                    origins: addresses,
+                    destinations: addresses,
+                    travelMode: 'DRIVING',
+                }, (response, status) => {
+                    if (status === 'OK') {
+                        resolve(response);
+                    } else {
+                        reject(status);
+                    }
+                });
+            });
+        }
+
+        // Parse the distance matrix
+        function parseDistanceMatrix(matrix) {
+            const rows = matrix.rows;
+            const travelTimes = [];
+            rows.forEach((row, i) => {
+                travelTimes[i] = [];
+                row.elements.forEach((element, j) => {
+                    travelTimes[i][j] = element.duration.value; // in seconds
+                });
+            });
+            return travelTimes;
+        }
+
+        // Simple Greedy TSP algorithm for small data sets
+        function solveTsp(travelTimes) {
+            const n = travelTimes.length;
+            const visited = Array(n).fill(false);
+            const route = [0];
+            visited[0] = true;
+
+            for (let i = 1; i < n; i++) {
+                let last = route[route.length - 1];
+                let nearest = -1;
+                let minDist = Infinity;
+
+                for (let j = 0; j < n; j++) {
+                    if (!visited[j] && travelTimes[last][j] < minDist) {
+                        nearest = j;
+                        minDist = travelTimes[last][j];
+                    }
+                }
+
+                if (nearest !== -1) {
+                    route.push(nearest);
+                    visited[nearest] = true;
+                }
+            }
+
+            route.push(0); // Return to the starting point
+            return route;
+        }
+
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return hours ? `${hours}h ${minutes}m` : `${minutes}m`;
+        }
+
+        async function findOptimalRoute() {
+            const addresses = [document.getElementById('startingAddress').value];
+
+            for (let i = 1; i <= addressCount; i++) {
+                const addressValue = document.getElementById(`address${i}`)?.value;
+                if (addressValue) {
+                    addresses.push(addressValue);
+                }
+            }
+
+            try {
+                const distanceMatrix = await getDistanceMatrix(addresses);
+                const travelTimes = parseDistanceMatrix(distanceMatrix);
+
+                const optimalRouteIndices = solveTsp(travelTimes);
+                const optimalRoute = optimalRouteIndices.map(i => addresses[i]);
+
+                let results = `<h2>Optimal Route:</h2>`;
+                let totalTime = 0;
+
+                for (let i = 0; i < optimalRoute.length - 1; i++) {
+                    const travelTime = travelTimes[optimalRouteIndices[i]][optimalRouteIndices[i + 1]];
+                    totalTime += travelTime;
+                    results += `<p>${optimalRoute[i]} -> ${optimalRoute[i + 1]} (${formatTime(travelTime)})</p>`;
+                }
+
+                results += `<p>Total Estimated Drive Time: ${formatTime(totalTime)}</p>`;
+                document.getElementById('results').innerHTML = results;
+
+                // Show the route on the map
+                plotRouteOnMap(optimalRoute);
+            } catch (error) {
+                document.getElementById('results').innerHTML = `An error occurred: ${error}`;
+            }
+        }
+
+        // Plot the route on Google Maps
+        function plotRouteOnMap(optimalRoute) {
+            const waypoints = optimalRoute.slice(1, -1).map(address => ({ location: address, stopover: true }));
+
+            directionsService.route({
+                origin: optimalRoute[0],
+                destination: optimalRoute[0],
+                waypoints: waypoints,
+                travelMode: 'DRIVING',
+                optimizeWaypoints: true
+            }, (response, status) => {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    console.error('Directions request failed due to ' + status);
+                }
+            });
+        }
+
+        window.onload = initMap;
+    </script>
+</body>
+</html>
