@@ -1,131 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Matt Allen</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Matthew Allen | Portfolio</title>
+<style>
+  /* Reset and base */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #E0E0E0;
+    line-height: 1.6;
+    padding: 1rem;
+  }
+  a {
+    color: #8AB4F8;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  header {
+    padding: 1rem 0;
+    border-bottom: 1px solid #333;
+    margin-bottom: 2rem;
+  }
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  nav a {
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.25rem 0;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  section {
+    margin-bottom: 3rem;
+  }
+  h1, h2, h3 {
+    color: #CFD8DC;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1.8rem;
+    border-bottom: 2px solid #2A3746;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  p {
+    font-size: 1rem;
+    color: #B0BEC5;
+  }
+  /* Projects grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  @media (max-width: 600px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+    nav {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+  }
+  .project-card {
+    background-color: #1E1E1E;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 5px #111;
+  }
+  .project-card img,
+  .project-card video {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 0.75rem;
+    object-fit: cover;
+  }
+  .project-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: #90CAF9;
+  }
+  .hobbies-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .hobbies-list li {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #2A3746;
+    font-size: 1rem;
+    color: #B0BEC5;
+  }
+  .contact-info {
+    font-size: 1rem;
+    color: #B0BEC5;
+    text-align: center;
+  }
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 1px solid #333;
+    color: #555;
+    font-size: 0.9rem;
+  }
+</style>
 </head>
-
 <body>
-    <a href="https://github.com/mattallenn" class="github-corner" aria-label="View source on GitHub"><svg width="80"
-            height="80" viewBox="0 0 250 250"
-            style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
-            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-            <path
-                d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
-                fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-            <path
-                d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
-                fill="currentColor" class="octo-body"></path>
-        </svg></a>
-    <style>
-        .github-corner:hover .octo-arm {
-            animation: octocat-wave 560ms ease-in-out
-        }
 
-        @keyframes octocat-wave {
+<header>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#projects">Projects</a>
+    <a href="#hobbies">Hobbies</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-            0%,
-            100% {
-                transform: rotate(0)
-            }
+<main>
+  <section id="home" aria-label="Introduction">
+    <h1>Matthew Allen | Portfolio</h1>
+    <p style="text-align:center; color:#90CAF9; margin-top:0.5rem;">
+        Here's a collection of some of my projects, and a bit about me!
+    </p>
+  </section>
 
-            20%,
-            60% {
-                transform: rotate(-25deg)
-            }
+  <section id="projects" aria-label="Projects">
+    <h2>Projects</h2>
+    <div class="projects-grid">
 
-            40%,
-            80% {
-                transform: rotate(10deg)
-            }
-        }
-
-        @media (max-width:500px) {
-            .github-corner:hover .octo-arm {
-                animation: none
-            }
-
-            .github-corner .octo-arm {
-                animation: octocat-wave 560ms ease-in-out
-            }
-        }
-    </style>
-    <div class="container">
-        <h2 style="text-align: center;">
-            matt allen - portfolio
-        </h2>
-        <nav class="navbar">
-            <ul>
-                <li><a href="index.html">‹ home</a></li>
-                <li><a href="projects.html">| projects ></a></li>
-            </ul>
-        </nav>
-        <hr>
-        <h3>
-        Projects
-        </h3>
+      <article class="project-card">
+        <img src="images/polaris-cad.jpg" alt="Polaris launchpad thruster system" loading="lazy" />
+        <h3 class="project-title">Polaris - Actively Stabilized Launchpad</h3>
         <p>
-            <b>ChessMate</b> - Robotic Chess Opponent
-            <br>
-            <br> Chessmate is a blah
-            <br>
-            
-            <img src = "Chessmate_1.jpeg" alt="ChessMate Robot" style="max-width: 50%"; height: auto;>
+          Lead Software Engineer at Purdue Orbital. Developing Polaris, a cold-gas thruster system designed to actively stabilize rocket launchpads before launch. Developed guidance, navigation, and control software integrating electrical components, including an RP2040 microcontroller interfacing with sensors and solenoids. Worked on PID control algorithms to counteract air disturbances, tuning through ground tests. Currently engineering a flight-weight system.
         </p>
-        <p>
-            <b>passman</b> - command line password manager
-            <br>- written in python
-            <br>- sqlite3 database
-            <br>- fernet data encryption
-            <br>- cloud storage with auto-syncing github repository
-        </p>
-        <p>
-            <b>send.it!</b> - marketplace messaging platform
-            <br>- written in java
-            <br>- custom multithreaded server and client
-            <br>- portable (importable & exportable) conversation data
-            <br>- message analytics for sellers and customers
+      </article>
 
-
+      <article class="project-card">
+        <img src="images/Chessmate.jpeg" alt="Chess Robot" loading="lazy" />
+        <h3 class="project-title">ChessMate Autonomous Chessboard</h3>
         <p>
+          Designing an autonomous chessboard capable of online gameplay against humans and AI. Integrated mechanical design with custom 3D-printed indexed chess pieces and a mechanical gripper. Developed software in Python to generate G-Code, scrape online chess platforms, and interface with Arduino for piece manipulation. Future goals include full online integration, computer vision for piece tracking, and a custom robotic arm gantry system.
+        </p>
+      </article>
 
-            <!--<p>
-                <b>Miscellanous Mini-Projects & Gizmos</b>
-                <br>
-                <br><i>VimScode</i>
-                <br>- neovim plugin to open vscode in current directory for debugging
-                <br>- note: this is borderline sacrilegious in the vim community... <b>be careful</b> 
-                <br>
-                <br><i>slivvr</i>
-                <br>- fully custom programming language with compiler
-                <br>- note: not even remotely close to done, hence the gizmos section
-                <br>
-                <br><i>terminal type</i>
-                <br>- command line typing speed test written in C 
-                <br>- ncurses
-                <br>
-                <br><i>.dotfiles - config files</i>
-                <br>- tmux (need to add)
-                <br>- vim (need to add)
-                <br>- <a href="https://github.com/mattallenn/neovim-config.git">neovim</a>
-                <br>- neofetch (need to add)
-            </p>
-        -->
-            <hr>
-        <h3>Connect with me</h3>
-        <p><a href="mailto:matthewallen442@gmail.com">email</a>
-            <br>
-            <a href="github.com/mattallenn">github</a>
-            <br>
-            <a href="https://www.linkedin.com/in/matthew-allen-731aa9244/">linkedin</a>
+      <article class="project-card">
+        <img src="images/keyboard.jpg" alt="Custom 3D-printed split ortho mechanical keyboard" loading="lazy" />
+        <h3 class="project-title">Custom Mechanical Keyboard</h3>
+        <p>
+          Built a fully custom, split ortholinear mechanical keyboard featuring 3D-printed cases, hand-soldered switch matrices, and custom firmware based on Arduino Nano and QMK. 
         </p>
-        <hr>
+      </article>
+
+      <article class="project-card">
+        <img src="images/drum-riser.jpeg" alt="Drum Riser" loading="lazy" />
+        <h3 class="project-title">Drum Riser</h3>
+        <p>
+            Built a custom drum riser to dampen sound, limit vibrations, and provide a
+            stable platform for my e-kit. Constructed from plywood and tennis balls.
+            Entire project costed less than $50.
         </p>
+      </article>
+
     </div>
-    <script src="script.js"></script>
-</body>
+  </section>
 
+  <section id="hobbies" aria-label="Hobbies">
+    <h2>Hobbies</h2>
+    <ul class="hobbies-list">
+      <li>Snowboarding and motorcycle riding</li>
+      <li>Music: Drums, guitar, recording, and mixing </li>
+      <li>Fabrication and woodworking</li>
+      <li>Robotics and things that move</li>
+      <li>3D printing and CAD</li>
+    </ul>
+  </section>
+
+  <section id="about" aria-label="About Me">
+    <h2>About</h2>
+    <p>
+        I'm a junior studying Mechatronics Engineering Technology at Purdue University.
+        I have experience in software development, embedded systems, electrical engineering, and 
+        mechanical design. I'm passionate about aerospace, robotics, and creating things that interest me.
+        Feel free to reach out if you'd like to connect!
+    </p>
+  </section>
+
+  <section id="contact" aria-label="Contact Information">
+    <h2>Contact</h2>
+    <p class="contact-info">
+      Email: <a href="mailto:matthewallen442@gmail.com">matthewallen442@gmail.com</a><br/>
+      LinkedIn: <a href="https://linkedin.com/in/mattallenn" target="_blank" rel="noopener noreferrer">https://linkedin.com/in/mattallenn</a>
+    </p>
+  </section>
+</main>
+
+<footer>
+  Thanks For Reading! - Matt 
+</footer>
+
+</body>
 </html>
