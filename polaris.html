@@ -28,36 +28,68 @@
     text-align: center;
   }
   h1 {
-    color: #90CAF9;
+    color: #ffffff;
     font-size: 2rem;
+  }
+  h2 {
+    color: #90CAF9;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.25rem;
   }
   img {
     width: 100%;
+    max-width: 400px;
     border-radius: 8px;
     margin-bottom: 1rem;
     object-fit: cover;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   p {
     font-size: 1rem;
     color: #B0BEC5;
+    margin-bottom: 2rem;
   }
   nav {
     margin-top: 2rem;
     text-align: center;
   }
+
 </style>
 </head>
 <body>
   <header>
-    <h1>Polaris</h1>
+    <h1>Polaris: Cold-Gas Thruster System</h1>
   </header>
 
-  <img src="images/polaris-cad.jpg" alt="Polaris Image" loading="lazy" />
-
+  <h2>Overview</h2>
+  <img src="images/polaris-cad.jpg" alt="Polaris CAD Model" loading="lazy" />
   <p>
-    <p>
-        Lead Software Engineer at Purdue Orbital. Developing Polaris, a cold-gas thruster system designed to actively stabilize rocket launchpads before launch. Developed guidance, navigation, and control software integrating electrical components, including an RP2040 microcontroller interfacing with sensors and solenoids. Worked on PID control algorithms to counteract air disturbances, tuning through ground tests. Currently engineering a flight-weight system.
-      </p>
+    Polaris is a cold-gas thruster system designed to actively stabilize the launchpad just before launch, ensuring the platform remains secure and steady during critical moments. The system is built around an RP2040-based microcontroller that controls relays and solenoids, powered by batteries, and continuously monitors environmental conditions through a network of sensors.
+
+As the lead software engineer, I am responsible for developing and maintaining the control software that drives this system. My role involves integrating hardware, software, and electronics, as well as developing the control software.
+  </p>
+
+  <h2>Details</h2>
+  <img src="images/hardware.png" alt="Polaris hardware" loading="lazy" />
+  <p>
+    The microcontroller interfaces with sensors such as the IMU and magnetometer, as well as with relays that control the air solenoids for the thrusters. The initial prototype is complete! We’re now engineering a flight-weight system that will be used on the mission. Current efforts include implementing the CAN bus protocol for communication with other subsystems, selecting a smaller microcontroller (with a push toward a custom PCB), and designing the wiring harness and power system. There are many design decisions in progress, and reliability is the top priority.
+  </p>
+
+  <img src="images/graph.png" alt="PID Tuning Graph" loading="lazy" />
+  <p>
+    The control program was executed, followed by a manual spin test of Polaris to observe its response. Highlighted portions represent manual spins. The sign convention used is as follows: positive indicates clockwise rotation, and negative indicates counter-clockwise rotation. Observed oscillations are due to the test unit swaying during the experiment.
+  </p>
+
+  <img src="images/schematic1.png" alt="Flight Prototype" loading="lazy" />
+  <img src="images/schematic2.png" alt="Flight Prototype" loading="lazy" />
+  <img src="images/schematic3.png" alt="Flight Prototype" loading="lazy" />
+  <p>
+    The wiring schematics for the different components are shown above. Key components include the RP2040 microcontroller, IMU, magnetometer, solenoid valves, relays, and power supply.
   </p>
 
   <nav>
