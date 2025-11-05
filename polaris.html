@@ -41,7 +41,7 @@
   }
   img {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     border-radius: 8px;
     margin-bottom: 1rem;
     object-fit: cover;
@@ -65,7 +65,8 @@
   <header>
     <h1>Polaris: Cold-Gas Thruster System</h1>
   </header>
-
+   <p>Disclaimer: This project is part of Purdue Orbital's GNC team. This is by no means a solo project, but rather a collaborative effort among many talented individuals. My specific contributions are detailed below.
+   </p>
   <h2>Overview</h2>
   <img src="images/polaris-cad.jpg" alt="Polaris CAD Model" loading="lazy" />
   <p>
@@ -82,7 +83,60 @@ As the lead software engineer, I am responsible for developing and maintaining t
 
   <img src="images/graph.png" alt="PID Tuning Graph" loading="lazy" />
   <p>
-    The control program was executed, followed by a manual spin test of Polaris to observe its response. Highlighted portions represent manual spins. The sign convention used is as follows: positive indicates clockwise rotation, and negative indicates counter-clockwise rotation. Observed oscillations are due to the test unit swaying during the experiment.
+    Above is a ground test that was ran. The control program was executed, followed by a manual spin test of Polaris to observe its response. Highlighted portions represent manual spins. The sign convention used is as follows: positive indicates clockwise rotation, and negative indicates counter-clockwise rotation. Observed oscillations are due to the test unit swaying during the experiment.
+  </p>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  
+  <style>
+      pre[class*="language-"] {
+          background: #000000 !important;
+          font-size: 13px !important;
+          line-height: 1.4;
+          border-radius: 8px;
+          padding: 12px;
+          overflow-x: auto;
+      }
+      code[class*="language-"] {
+          background: transparent !important;
+      }
+  </style>
+  
+  <pre><code class="language-python">
+
+# PID Loop
+while True:
+            
+    try:
+        # Loop through different headings
+        cycle_headings()
+
+        current_time = time.monotonic()  # Store monotonic time
+        current_heading = get_current_heading()
+        
+        ## For data logging
+        gyro_x, gyro_y, gyro_z = sensor.gyro or (999,999,999)
+        
+        # Compute with wraparound handling
+        # This means 0 and 360 are treated the same.
+        error = (setpoint - current_heading + 180) % 360 - 180
+            
+        # Compute delta T
+        delta_time = current_time - last_time
+        last_time = current_time
+
+        # Compute Derivative
+        ## check if logic
+        derivative = (error - previous_error) / delta_time if delta_time > 0 else 0
+        previous_error = error
+
+        # Compute PID output
+        output = (Kp * error) + (Kd * derivative)
+  </code></pre>
+  <p>
+    The above code snippet showcases the core PID control loop used in Polaris. It continuously reads the current heading from the IMU, calculates the error relative to the desired setpoint, and computes the PID output to adjust thruster activation accordingly. This specific implementation is from a "Martian" test, which cycles between headings of 0°, 90°, 180°, and 270° to evaluate system response and tune PID parameters, as well as look cool!
   </p>
 
   <img src="images/schematic1.png" alt="Flight Prototype" loading="lazy" />

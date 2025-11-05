@@ -28,8 +28,16 @@
     text-align: center;
   }
   h1 {
-    color: #90CAF9;
+    color: #ffffff;
     font-size: 2rem;
+  }
+  h2 {
+    color: #90CAF9;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.25rem;
   }
   img {
     width: 100%;
@@ -49,16 +57,21 @@
 </head>
 <body>
   <header>
-    <h1>Project Title Here</h1>
+    <h1>Split Mechanical Keyboard</h1>
   </header>
 
-  <img src="images/project-image.jpg" alt="Project Title Image" loading="lazy" />
+  <h2>
+    Overview
+  </h2>
+  <img src="images/keyboard.jpg" alt="Keyboard" loading="lazy" />
 
   <p>
     <p>
-        Lead Software Engineer at Purdue Orbital. Developing Polaris, a cold-gas thruster system designed to actively stabilize rocket launchpads before launch. Developed guidance, navigation, and control software integrating electrical components, including an RP2040 microcontroller interfacing with sensors and solenoids. Worked on PID control algorithms to counteract air disturbances, tuning through ground tests. Currently engineering a flight-weight system.
+        A hand-wired split mechanical keyboard built from scratch using mechanical switches, diodes, and a microcontroller (Arduino Nano). The case was 3D printed, and the keycaps came from an old keyboard. The firmware is developed using QMK. 
+        This project was definitely worth it and all of the soldering was suprisingly relaxing.
       </p>
   </p>
+  <img src="images/hand-wired-keyboard.png" alt="Keyboard Wiring" loading="lazy" />
 
   <nav>
     <a href="index.html">← Back to Portfolio</a>

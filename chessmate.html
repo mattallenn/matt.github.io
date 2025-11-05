@@ -28,16 +28,34 @@
     text-align: center;
   }
   h1 {
-    color: #90CAF9;
+    color: #ffffff;
     font-size: 2rem;
+  }
+  h2 {
+    color: #90CAF9;
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.25rem;
   }
   img {
     width: 100%;
+    max-width: 600px;
     border-radius: 8px;
     margin-bottom: 1rem;
     object-fit: cover;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   p {
+    font-size: 1rem;
+    color: #B0BEC5;
+    margin-bottom: 2rem;
+  }
+  ul {
+    margin-bottom: 2rem;
     font-size: 1rem;
     color: #B0BEC5;
   }
@@ -45,19 +63,144 @@
     margin-top: 2rem;
     text-align: center;
   }
+
 </style>
 </head>
 <body>
   <header>
-    <h1>Project Title Here</h1>
+    <h1>Chessmate: Robotic Chess Opponent</h1>
   </header>
-
-  <img src="images/project-image.jpg" alt="Project Title Image" loading="lazy" />
-
+  <h2>Overview</h2>
+  <img src="images/Chessmate.jpeg" alt="Chess Robot" loading="lazy" />
   <p>
-    <p>
-        Lead Software Engineer at Purdue Orbital. Developing Polaris, a cold-gas thruster system designed to actively stabilize rocket launchpads before launch. Developed guidance, navigation, and control software integrating electrical components, including an RP2040 microcontroller interfacing with sensors and solenoids. Worked on PID control algorithms to counteract air disturbances, tuning through ground tests. Currently engineering a flight-weight system.
-      </p>
+    I wanted to play online chess on a physical board, as well as against an AI. This project is still a work in progress, but here are the main goals I set out to achieve:
+  </p>
+
+
+  <ul>
+    <li>Create a (mostly) autonomous system</li>
+    <li>Design and manufacture as many parts as possible myself</li>
+    <li>Enable play against others on <a href="https://www.chess.com" target="_blank">chess.com</a> and/or <a href="https://lichess.org" target="_blank">lichess.org</a></li>
+    <li>Integrate Stockfish or a similar chess engine with dynamic ELO (rating) to help improve my gameplay</li>
+    <li>Repurpose my old 3D printer as a foundation</li>
+  </ul>
+  
+  <p>So far, I have a working system that uses stockfish as the chess engine. A user can make a move, the robot will calculate it's move, and move the piece.
+    I've found the python-chess library to be very useful for this project.
+  </p>
+  <p>
+    One of my dream projects is to build a CNC milling machine from scratch. While this chess project isn’t in the same realm, many of the same principles apply.
+  </p>
+
+
+  <h2>Details</h2>
+  <img src="images/gripper.png" alt="chess gripper" loading="lazy" />
+  <p>
+    I developed a custom gripper to pick up and move chess pieces. 
+    The gripper is controlled by an Arduino, which receives commands from the main Python program. 
+    A cheap, 9g micro servo acts as the gripperm mechanism, and a conically shaped end fits into the chess pieces.
+    Due to the conical shape, it also acts as an autocentering mechanism, allowing for some tolerance in positioning.
+  </p>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  
+  <style>
+      pre[class*="language-"] {
+          background: #000000 !important;
+          font-size: 13px !important;
+          line-height: 1.4;
+          border-radius: 8px;
+          padding: 12px;
+          overflow-x: auto;
+      }
+      code[class*="language-"] {
+          background: transparent !important;
+      }
+  </style>
+  
+  <pre><code class="language-python">
+  # Main Chess Game
+  def main():
+      # Initialize robot
+      printer_ser = initialize_printer()
+      gripper = ArduinoController()
+      gripper.connect()
+  
+      # Home the robot
+      send_gcode(printer_ser, "G28")
+      send_gcode(printer_ser, "G1 X0 Y220 Z75 F5000")
+      stockfish_path = "stockfish"
+      engine = chess.engine.SimpleEngine.popen_uci(stockfish_path)
+  
+      # Set skill level
+      # 0 = easiest
+      # 20 = hardest
+      engine.configure({"Skill Level": 1})
+      board = chess.Board()
+  
+      print("Welcome to Robot Chess! You play as White.")
+      print("Enter moves in UCI format (e.g., 'e2e4'). Type 'exit' to quit.\n")
+  
+      while not board.is_game_over():
+          print(board)
+          print("FEN:", board.fen())
+  
+          # User (White) move
+          user_move = input("Your move: ").strip()
+          if user_move.lower() == "exit":
+              break
+  
+          try:
+              move = chess.Move.from_uci(user_move)
+              if move not in board.legal_moves:
+                  print("Illegal move. Try again.\n")
+                  continue
+              board.push(move)
+          except Exception:
+              print("Invalid move format. Use UCI (e.g., 'e2e4').\n")
+              continue
+  
+          if board.is_game_over():
+              break
+  
+          # Computer (Black) move
+          print("Computer thinking...")
+          result = engine.play(board, chess.engine.Limit(time=1))
+          computer_move = result.move
+          piece = board.piece_at(computer_move.from_square)
+          if piece:
+              print(f"Computer will move {piece.symbol().lower()} (height {piece_height(piece.piece_type)})")
+          # Pre-capture handled in execute_move
+          execute_move(printer_ser, gripper, str(computer_move), board)
+          board.push(computer_move)
+          print(f"Computer plays: {computer_move}\n")
+  
+      print(board)
+      print("Final FEN:", board.fen())
+      print("Game over:", board.result())
+  
+      engine.quit()
+      if printer_ser.is_open:
+          printer_ser.close()
+      print("Robot connection closed.")
+  </code></pre>
+  
+  <p>
+      Above is a snippet of the main chess game loop. The user plays as white and inputs moves in UCI format (e.g., "e2e4"). The robot uses Stockfish to calculate its move, which is then executed on the physical board using G-code commands sent to the robot.
+  </p>
+  <img src="images/chess-pieces.png" alt="chess pieces" loading="lazy" />
+  <p>
+    The chess pieces were 3D printed using PLA filament on my Bambu Lab A1 Mini.
+    I designed the pieces in AutoDesk Inventor. The key features I added were the cones on the 
+    top which the gripper grabs onto, and the indexing pins on the bottom which ensure the pieces
+    are always centered on the squares.
+  </p>
+
+  <img src="images/chessmate-electrical.png" alt="ChessMate electrical Schematic" loading="lazy" />
+  <p>
+    The wiring for the robot is really straightfotward. The Arduino controls the servo gripper, while the main computer runs the Python code and sends G-code commands to the robot via serial communication.
+    The printer control is connected to the laptop via serial.
   </p>
 
   <nav>
