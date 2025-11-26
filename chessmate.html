@@ -1,210 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Project Title | Matthew Allen Portfolio</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
-    color: #E0E0E0;
-    line-height: 1.6;
-    padding: 1rem;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  a {
-    color: #8AB4F8;
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  header {
-    padding: 1rem 0;
-    border-bottom: 1px solid #333;
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-  h1 {
-    color: #ffffff;
-    font-size: 2rem;
-  }
-  h2 {
-    color: #90CAF9;
-    font-size: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.25rem;
-  }
-  img {
-    width: 100%;
-    max-width: 600px;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    object-fit: cover;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  p {
-    font-size: 1rem;
-    color: #B0BEC5;
-    margin-bottom: 2rem;
-  }
-  ul {
-    margin-bottom: 2rem;
-    font-size: 1rem;
-    color: #B0BEC5;
-  }
-  nav {
-    margin-top: 2rem;
-    text-align: center;
-  }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chessmate | Matthew Allen Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-</style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.3) 0%, rgba(10, 10, 15, 0.8) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        a {
+            color: #64ffda;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .nav-wrapper {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        nav {
+            pointer-events: auto;
+            display: inline-flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            background: rgba(20, 20, 30, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(100, 255, 218, 0.15);
+            margin: 0 auto;
+            width: fit-content;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav a {
+            font-size: 0.65rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #64ffda;
+        }
+
+        nav a:hover {
+            background: rgba(100, 255, 218, 0.1);
+            color: #00d9ff;
+        }
+
+        nav a.active {
+            background: rgba(100, 255, 218, 0.15);
+            color: #00d9ff;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            padding-top: 140px;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #64ffda;
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+            letter-spacing: 0.1em;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+            color: #64ffda;
+            text-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+            border-bottom: 2px solid rgba(100, 255, 218, 0.3);
+            padding-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        p,
+        li {
+            font-size: 0.7rem;
+            color: #b0bec5;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        ul {
+            margin-bottom: 2rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #00d9ff;
+            font-size: 0.7rem;
+            margin-bottom: 3rem;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+        }
+
+        .project-content {
+            background: rgba(20, 20, 30, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid rgba(100, 255, 218, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-content img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+
+        pre[class*="language-"] {
+            background: #000000 !important;
+            font-size: 0.7rem !important;
+            line-height: 1.6;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            font-family: 'Courier New', monospace !important;
+        }
+
+        code[class*="language-"] {
+            background: transparent !important;
+            font-family: 'Courier New', monospace !important;
+        }
+
+        .back-nav {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 2px solid rgba(100, 255, 218, 0.2);
+            color: #64ffda;
+            font-size: 0.6rem;
+            margin-top: 4rem;
+        }
+
+        .github-corner {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 101;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            h2 {
+                font-size: 1rem;
+            }
+
+            .nav-wrapper {
+                top: auto;
+                bottom: 20px;
+            }
+
+            nav {
+                width: 90%;
+                justify-content: space-around;
+                gap: 0;
+            }
+
+            nav a {
+                font-size: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            pre[class*="language-"] {
+                font-size: 0.6rem !important;
+            }
+        }
+    </style>
 </head>
+
 <body>
-  <header>
-    <h1>Chessmate: Robotic Chess Opponent</h1>
-  </header>
-  <h2>Overview</h2>
-  <img src="images/Chessmate.jpeg" alt="Chess Robot" loading="lazy" />
-  <p>
-    I wanted to play online chess on a physical board, as well as against an AI. This project is still a work in progress, but here are the main goals I set out to achieve:
-  </p>
 
+    <canvas id="starfield"></canvas>
 
-  <ul>
-    <li>Create a (mostly) autonomous system</li>
-    <li>Design and manufacture as many parts as possible myself</li>
-    <li>Enable play against others on <a href="https://www.chess.com" target="_blank">chess.com</a> and/or <a href="https://lichess.org" target="_blank">lichess.org</a></li>
-    <li>Integrate Stockfish or a similar chess engine with dynamic ELO (rating) to help improve my gameplay</li>
-    <li>Repurpose my old 3D printer as a foundation</li>
-  </ul>
-  
-  <p>So far, I have a working system that uses stockfish as the chess engine. A user can make a move, the robot will calculate it's move, and move the piece.
-    I've found the python-chess library to be very useful for this project.
-  </p>
-  <p>
-    One of my dream projects is to build a CNC milling machine from scratch. While this chess project isn’t in the same realm, many of the same principles apply.
-  </p>
+    <a href="https://github.com/mattallenn" class="github-corner" aria-label="View source on GitHub">
+        <svg width="80" height="80" viewBox="0 0 250 250"
+            style="fill:#64ffda; color:#0a0a0f; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" />
+            <path
+                d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+                fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm" />
+            <path
+                d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+                fill="currentColor" class="octo-body" />
+        </svg>
+    </a>
 
+    <div class="nav-wrapper">
+        <nav>
+            <a href="index.html#home">HOME</a>
+            <a href="index.html#projects">PROJECTS</a>
+            <a href="index.html#hobbies">HOBBIES</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
+        </nav>
+    </div>
 
-  <h2>Details</h2>
-  <img src="images/gripper.png" alt="chess gripper" loading="lazy" />
-  <p>
-    I developed a custom gripper to pick up and move chess pieces. 
-    The gripper is controlled by an Arduino, which receives commands from the main Python program. 
-    A cheap, 9g micro servo acts as the gripperm mechanism, and a conically shaped end fits into the chess pieces.
-    Due to the conical shape, it also acts as an autocentering mechanism, allowing for some tolerance in positioning.
-  </p>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-  
-  <style>
-      pre[class*="language-"] {
-          background: #000000 !important;
-          font-size: 13px !important;
-          line-height: 1.4;
-          border-radius: 8px;
-          padding: 12px;
-          overflow-x: auto;
-      }
-      code[class*="language-"] {
-          background: transparent !important;
-      }
-  </style>
-  
-  <pre><code class="language-python">
-  # Main Chess Game
-  def main():
-      # Initialize robot
-      printer_ser = initialize_printer()
-      gripper = ArduinoController()
-      gripper.connect()
-  
-      # Home the robot
-      send_gcode(printer_ser, "G28")
-      send_gcode(printer_ser, "G1 X0 Y220 Z75 F5000")
-      stockfish_path = "stockfish"
-      engine = chess.engine.SimpleEngine.popen_uci(stockfish_path)
-  
-      # Set skill level
-      # 0 = easiest
-      # 20 = hardest
-      engine.configure({"Skill Level": 1})
-      board = chess.Board()
-  
-      print("Welcome to Robot Chess! You play as White.")
-      print("Enter moves in UCI format (e.g., 'e2e4'). Type 'exit' to quit.\n")
-  
-      while not board.is_game_over():
-          print(board)
-          print("FEN:", board.fen())
-  
-          # User (White) move
-          user_move = input("Your move: ").strip()
-          if user_move.lower() == "exit":
-              break
-  
-          try:
-              move = chess.Move.from_uci(user_move)
-              if move not in board.legal_moves:
-                  print("Illegal move. Try again.\n")
-                  continue
-              board.push(move)
-          except Exception:
-              print("Invalid move format. Use UCI (e.g., 'e2e4').\n")
-              continue
-  
-          if board.is_game_over():
-              break
-  
-          # Computer (Black) move
-          print("Computer thinking...")
-          result = engine.play(board, chess.engine.Limit(time=1))
-          computer_move = result.move
-          piece = board.piece_at(computer_move.from_square)
-          if piece:
-              print(f"Computer will move {piece.symbol().lower()} (height {piece_height(piece.piece_type)})")
-          # Pre-capture handled in execute_move
-          execute_move(printer_ser, gripper, str(computer_move), board)
-          board.push(computer_move)
-          print(f"Computer plays: {computer_move}\n")
-  
-      print(board)
-      print("Final FEN:", board.fen())
-      print("Game over:", board.result())
-  
-      engine.quit()
-      if printer_ser.is_open:
-          printer_ser.close()
-      print("Robot connection closed.")
-  </code></pre>
-  
-  <p>
-      Above is a snippet of the main chess game loop. The user plays as white and inputs moves in UCI format (e.g., "e2e4"). The robot uses Stockfish to calculate its move, which is then executed on the physical board using G-code commands sent to the robot.
-  </p>
-  <img src="images/chess-pieces.png" alt="chess pieces" loading="lazy" />
-  <p>
-    The chess pieces were 3D printed using PLA filament on my Bambu Lab A1 Mini.
-    I designed the pieces in AutoDesk Inventor. The key features I added were the cones on the 
-    top which the gripper grabs onto, and the indexing pins on the bottom which ensure the pieces
-    are always centered on the squares.
-  </p>
+    <main>
+        <section id="project" class="visible">
+            <h1>CHESSMATE</h1>
+            <p class="subtitle">[ ROBOTIC CHESS OPPONENT ]</p>
 
-  <img src="images/chessmate-electrical.png" alt="ChessMate electrical Schematic" loading="lazy" />
-  <p>
-    The wiring for the robot is really straightfotward. The Arduino controls the servo gripper, while the main computer runs the Python code and sends G-code commands to the robot via serial communication.
-    The printer control is connected to the laptop via serial.
-  </p>
+            <div class="project-content">
+                <h2>&gt; OVERVIEW_</h2>
+                <img src="images/Chessmate.jpeg" alt="Chess Robot" loading="lazy" />
+                <p>
+                    I wanted to play online chess on a physical board, as well as against an AI. This project is still a work in progress, but here are the main goals I set out to achieve:
+                </p>
 
-  <nav>
-    <a href="index.html">← Back to Portfolio</a>
-  </nav>
+                <ul>
+                    <li>Create a (mostly) autonomous system</li>
+                    <li>Design and manufacture as many parts as possible myself</li>
+                    <li>Enable play against others on <a href="https://www.chess.com" target="_blank">chess.com</a> and/or <a href="https://lichess.org" target="_blank">lichess.org</a></li>
+                    <li>Integrate Stockfish or a similar chess engine with dynamic ELO (rating) to help improve my gameplay</li>
+                    <li>Repurpose my old 3D printer as a foundation</li>
+                </ul>
+
+                <p>So far, I have a working system that uses stockfish as the chess engine. A user can make a move, the robot will calculate it's move, and move the piece.
+                    I've found the python-chess library to be very useful for this project.
+                </p>
+                <p>
+                    One of my dream projects is to build a CNC milling machine from scratch. While this chess project isn't in the same realm, many of the same principles apply.
+                </p>
+
+                <h2>&gt; DETAILS_</h2>
+                <img src="images/gripper.png" alt="chess gripper" loading="lazy" />
+                <p>
+                    I developed a custom gripper to pick up and move chess pieces. 
+                    The gripper is controlled by an Arduino, which receives commands from the main Python program. 
+                    A cheap, 9g micro servo acts as the gripperm mechanism, and a conically shaped end fits into the chess pieces.
+                    Due to the conical shape, it also acts as an autocentering mechanism, allowing for some tolerance in positioning.
+                </p>
+
+                <pre><code class="language-python"># Main Chess Game
+def main():
+    # Initialize robot
+    printer_ser = initialize_printer()
+    gripper = ArduinoController()
+    gripper.connect()
+
+    # Home the robot
+    send_gcode(printer_ser, "G28")
+    send_gcode(printer_ser, "G1 X0 Y220 Z75 F5000")
+    stockfish_path = "stockfish"
+    engine = chess.engine.SimpleEngine.popen_uci(stockfish_path)
+
+    # Set skill level
+    # 0 = easiest
+    # 20 = hardest
+    engine.configure({"Skill Level": 1})
+    board = chess.Board()
+
+    print("Welcome to Robot Chess! You play as White.")
+    print("Enter moves in UCI format (e.g., 'e2e4'). Type 'exit' to quit.\n")
+
+    while not board.is_game_over():
+        print(board)
+        print("FEN:", board.fen())
+
+        # User (White) move
+        user_move = input("Your move: ").strip()
+        if user_move.lower() == "exit":
+            break
+
+        try:
+            move = chess.Move.from_uci(user_move)
+            if move not in board.legal_moves:
+                print("Illegal move. Try again.\n")
+                continue
+            board.push(move)
+        except Exception:
+            print("Invalid move format. Use UCI (e.g., 'e2e4').\n")
+            continue
+
+        if board.is_game_over():
+            break
+
+        # Computer (Black) move
+        print("Computer thinking...")
+        result = engine.play(board, chess.engine.Limit(time=1))
+        computer_move = result.move
+        piece = board.piece_at(computer_move.from_square)
+        if piece:
+            print(f"Computer will move {piece.symbol().lower()} (height {piece_height(piece.piece_type)})")
+        # Pre-capture handled in execute_move
+        execute_move(printer_ser, gripper, str(computer_move), board)
+        board.push(computer_move)
+        print(f"Computer plays: {computer_move}\n")
+
+    print(board)
+    print("Final FEN:", board.fen())
+    print("Game over:", board.result())
+
+    engine.quit()
+    if printer_ser.is_open:
+        printer_ser.close()
+    print("Robot connection closed.")</code></pre>
+
+                <p>
+                    Above is a snippet of the main chess game loop. The user plays as white and inputs moves in UCI format (e.g., "e2e4"). The robot uses Stockfish to calculate its move, which is then executed on the physical board using G-code commands sent to the robot.
+                </p>
+
+                <img src="images/chess-pieces.png" alt="chess pieces" loading="lazy" />
+                <p>
+                    The chess pieces were 3D printed using PLA filament on my Bambu Lab A1 Mini.
+                    I designed the pieces in AutoDesk Inventor. The key features I added were the cones on the 
+                    top which the gripper grabs onto, and the indexing pins on the bottom which ensure the pieces
+                    are always centered on the squares.
+                </p>
+
+                <img src="images/chessmate-electrical.png" alt="ChessMate electrical Schematic" loading="lazy" />
+                <p>
+                    The wiring for the robot is really straightfotward. The Arduino controls the servo gripper, while the main computer runs the Python code and sends G-code commands to the robot via serial communication.
+                    The printer control is connected to the laptop via serial.
+                </p>
+
+                <div class="back-nav">
+                    <a href="index.html">← BACK TO PORTFOLIO</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        [ THANKS FOR VISITING ] - MATT
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const stars = [];
+        const numStars = 200;
+        const shootingStars = [];
+        let lastShootingStarTime = 0;
+        const shootingStarMinInterval = 5000;
+        const shootingStarMaxInterval = 15000;
+        let nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.z = Math.random() * 2;
+                this.size = Math.random() * 1.5;
+                this.speed = Math.random() * 0.2 + 0.1;
+                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
+                this.twinkleDirection = Math.random() > 0.5 ? 1 : -1;
+                this.opacity = this.z;
+                this.isTwinkling = Math.random() > 0.7;
+            }
+
+            update() {
+                this.y += this.speed;
+
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                }
+                if (this.y < -10) {
+                    this.y = canvas.height;
+                }
+
+                if (this.isTwinkling) {
+                    this.opacity += this.twinkleSpeed * this.twinkleDirection;
+                    if (this.opacity >= this.z || this.opacity <= 0.2) {
+                        this.twinkleDirection *= -1;
+                    }
+
+                    if (Math.random() > 0.995) {
+                        this.isTwinkling = false;
+                        this.opacity = this.z;
+                    }
+                } else {
+                    if (Math.random() > 0.998) {
+                        this.isTwinkling = true;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(100, 255, 218, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        class ShootingStar {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = -Math.random() * canvas.width * 0.5;
+                this.y = Math.random() * canvas.height * 0.3;
+                this.length = Math.random() * 100 + 50;
+                this.speedX = Math.random() * 5 + 3;
+                this.speedY = Math.random() * 2 + 1;
+                this.opacity = 1;
+                this.fadeSpeed = 0.02;
+                this.active = true;
+            }
+
+            update() {
+                if (!this.active) return;
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width * 0.6) {
+                    this.opacity -= this.fadeSpeed;
+                }
+
+                if (this.opacity <= 0) {
+                    this.active = false;
+                }
+            }
+
+            draw() {
+                if (!this.active) return;
+
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - this.length * (this.speedX / (this.speedX + this.speedY)), this.y - this.length * (this.speedY / (this.speedX + this.speedY)));
+                ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, this.opacity)})`;
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        }
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push(new Star());
+        }
+
+        function animate(currentTime) {
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            if (currentTime - lastShootingStarTime > nextShootingStarInterval) {
+                shootingStars.push(new ShootingStar());
+                lastShootingStarTime = currentTime;
+                nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
+            }
+
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                const sStar = shootingStars[i];
+                sStar.update();
+                sStar.draw();
+
+                if (!sStar.active) {
+                    shootingStars.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate(0);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+
 </body>
+
 </html>
