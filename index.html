@@ -62,89 +62,20 @@
             text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
         }
 
-        <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Matthew Allen | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Press Start 2P', cursive;
-            background: #0a0a0f;
-            color: #e0e0e0;
-            line-height: 1.8;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Starfield background */
-        #starfield {
+        /* Updated Navigation - styled to match original */
+        .nav-wrapper {
             position: fixed;
-            top: 0;
+            top: 20px;
             left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-        }
-
-        /* Animated gradient overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.3) 0%, rgba(10, 10, 15, 0.8) 100%);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        a {
-            color: #64ffda;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        a:hover {
-            color: #00d9ff;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-        }
-
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1rem 1.5rem;
-            background: transparent;
-            z-index: 100;
-            transition: all 0.3s ease;
-            /* These two lines center the <nav> child */
+            right: 0;
             display: flex;
             justify-content: center;
-        }
-
-        header.scrolled {
-            background: rgba(10, 10, 15, 0.3);
-            backdrop-filter: blur(5px);
+            z-index: 1000;
+            pointer-events: none;
         }
 
         nav {
+            pointer-events: auto;
             display: inline-flex;
             justify-content: center;
             gap: 0.5rem;
@@ -156,6 +87,7 @@
             border: 1px solid rgba(100, 255, 218, 0.15);
             margin: 0 auto;
             width: fit-content;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         nav a {
@@ -164,10 +96,19 @@
             position: relative;
             transition: all 0.3s ease;
             border-radius: 20px;
+            color: #64ffda;
         }
 
         nav a:hover {
             background: rgba(100, 255, 218, 0.1);
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        nav a.active {
+            background: rgba(100, 255, 218, 0.15);
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
         }
 
         main {
@@ -360,8 +301,15 @@
                 font-size: 1rem;
             }
 
+            .nav-wrapper {
+                top: auto;
+                bottom: 20px;
+            }
+
             nav {
-                gap: 1rem;
+                width: 90%;
+                justify-content: space-around;
+                gap: 0;
             }
 
             nav a {
@@ -393,7 +341,7 @@
         </svg>
     </a>
 
-    <header id="header">
+    <div class="nav-wrapper">
         <nav>
             <a href="#home">HOME</a>
             <a href="#projects">PROJECTS</a>
@@ -401,7 +349,7 @@
             <a href="#about">ABOUT</a>
             <a href="#contact">CONTACT</a>
         </nav>
-    </header>
+    </div>
 
     <main>
         <section id="home" aria-label="Introduction">
@@ -668,12 +616,12 @@
             canvas.height = window.innerHeight;
         });
 
-        // Scroll animations
+        // Scroll animations with nav highlighting
         const sections = document.querySelectorAll('section');
-        const header = document.getElementById('header');
+        const navLinks = document.querySelectorAll('nav a');
 
         const observerOptions = {
-            threshold: 0.15,
+            threshold: 0.2,
             rootMargin: '0px 0px -100px 0px'
         };
 
@@ -681,21 +629,20 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    
+                    // Update Nav Highlight
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
                 }
             });
         }, observerOptions);
 
         sections.forEach(section => {
             observer.observe(section);
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
         });
     </script>
 
