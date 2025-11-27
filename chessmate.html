@@ -7,6 +7,14 @@
     <title>Chessmate | Matthew Allen Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.150.0/examples/jsm/"
+        }
+    }
+    </script>
     <style>
         * {
             box-sizing: border-box;
@@ -210,6 +218,71 @@
             margin-top: 2rem;
         }
 
+        /* 3D Model Viewer Styles */
+        .model-viewer-container {
+            width: 100%;
+            height: 500px;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border: 2px solid rgba(100, 255, 218, 0.2);
+            background: rgba(10, 10, 15, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-viewer-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .model-viewer-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #64ffda;
+            font-size: 0.6rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .model-viewer-loading::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            margin: 1rem auto;
+            border: 3px solid rgba(100, 255, 218, 0.3);
+            border-top-color: #64ffda;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .model-viewer-error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff6b6b;
+            font-size: 0.6rem;
+            text-align: center;
+            padding: 1rem;
+            z-index: 10;
+        }
+
+        .model-viewer-caption {
+            text-align: center;
+            font-size: 0.6rem;
+            color: #b0bec5;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
         footer {
             text-align: center;
             padding: 2rem;
@@ -253,6 +326,10 @@
 
             pre[class*="language-"] {
                 font-size: 0.6rem !important;
+            }
+
+            .model-viewer-container {
+                height: 400px;
             }
         }
     </style>
@@ -320,6 +397,11 @@
                     A cheap, 9g micro servo acts as the gripperm mechanism, and a conically shaped end fits into the chess pieces.
                     Due to the conical shape, it also acts as an autocentering mechanism, allowing for some tolerance in positioning.
                 </p>
+
+                <div class="model-viewer-container" id="gripper-viewer">
+                    <div class="model-viewer-loading">LOADING 3D MODEL...</div>
+                </div>
+                <p class="model-viewer-caption">[ INTERACTIVE 3D MODEL - DRAG TO ROTATE ]</p>
 
                 <pre><code class="language-python"># Main Chess Game
 def main():
@@ -398,6 +480,11 @@ def main():
                     are always centered on the squares.
                 </p>
 
+                <div class="model-viewer-container" id="piece-viewer">
+                    <div class="model-viewer-loading">LOADING 3D MODEL...</div>
+                </div>
+                <p class="model-viewer-caption">[ INTERACTIVE 3D MODEL - DRAG TO ROTATE ]</p>
+
                 <img src="images/chessmate-electrical.png" alt="ChessMate electrical Schematic" loading="lazy" />
                 <p>
                     The wiring for the robot is really straightfotward. The Arduino controls the servo gripper, while the main computer runs the Python code and sends G-code commands to the robot via serial communication.
@@ -417,6 +504,158 @@ def main():
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Make functions available globally for initialization
+        window.initModelViewer = function(containerId, modelPath, isGLTF = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            // Check WebGL support
+            if (!window.WebGLRenderingContext) {
+                container.innerHTML = '<div class="model-viewer-error">WEBGL NOT SUPPORTED<br>Your browser does not support WebGL.</div>';
+                return;
+            }
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene setup
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0f);
+
+            // Camera
+            const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+            camera.position.set(0, 0, 5);
+
+            // Renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lighting (matching site theme)
+            const ambientLight = new THREE.AmbientLight(0x64ffda, 0.4);
+            scene.add(ambientLight);
+
+            const directionalLight1 = new THREE.DirectionalLight(0x64ffda, 0.6);
+            directionalLight1.position.set(5, 5, 5);
+            scene.add(directionalLight1);
+
+            const directionalLight2 = new THREE.DirectionalLight(0x00d9ff, 0.4);
+            directionalLight2.position.set(-5, -5, -5);
+            scene.add(directionalLight2);
+
+            // Controls
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.enableZoom = true;
+            controls.enablePan = false;
+            controls.minDistance = 2;
+            controls.maxDistance = 10;
+
+            // Load model
+            const loader = isGLTF ? new GLTFLoader() : new STLLoader();
+            
+            loader.load(
+                modelPath,
+                function (object) {
+                    // Remove loading indicator
+                    const loadingEl = container.querySelector('.model-viewer-loading');
+                    if (loadingEl) loadingEl.remove();
+
+                    let mesh;
+                    
+                    if (isGLTF) {
+                        // GLTF format
+                        mesh = object.scene || object;
+                        scene.add(mesh);
+                    } else {
+                        // STL format
+                        const geometry = object;
+                        const material = new THREE.MeshStandardMaterial({
+                            color: 0x64ffda,
+                            metalness: 0.3,
+                            roughness: 0.7,
+                            emissive: 0x001122,
+                            emissiveIntensity: 0.2
+                        });
+                        mesh = new THREE.Mesh(geometry, material);
+                        scene.add(mesh);
+                    }
+
+                    // Center and scale model
+                    const box = new THREE.Box3().setFromObject(mesh);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 2 / maxDim;
+
+                    mesh.scale.multiplyScalar(scale);
+                    mesh.position.sub(center.multiplyScalar(scale));
+
+                    // Animation loop
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        controls.update();
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+
+                    // Handle resize
+                    function handleResize() {
+                        const newWidth = container.clientWidth;
+                        const newHeight = container.clientHeight;
+                        camera.aspect = newWidth / newHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(newWidth, newHeight);
+                    }
+                    window.addEventListener('resize', handleResize);
+                },
+                function (progress) {
+                    // Progress callback (optional)
+                    console.log('Loading progress:', progress);
+                },
+                function (error) {
+                    // Error callback
+                    console.error('Error loading model:', error);
+                    const loadingEl = container.querySelector('.model-viewer-loading');
+                    if (loadingEl) loadingEl.remove();
+                    container.innerHTML = '<div class="model-viewer-error">MODEL FILE NOT FOUND<br>Please add your 3D model files to the models/ directory.<br>See models/README.md for instructions.</div>';
+                }
+            );
+        }
+
+        // Initialize viewers when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            // Gripper viewer - try models/gripper.glb first, then models/gripper.stl
+            const gripperGLB = 'models/gripper.glb';
+            const gripperSTL = 'models/gripper.stl';
+            
+            // Try GLB first, fallback to STL on error
+            window.initModelViewer('gripper-viewer', gripperGLB, true);
+            
+            // If GLB fails, the error handler will show an error message
+            // You can manually change the path above to use STL if preferred
+
+            // Chess piece viewer - try models/chess-piece.glb first, then models/chess-piece.stl
+            const pieceGLB = 'models/chess-piece.glb';
+            const pieceSTL = 'models/chess-piece.stl';
+            
+            window.initModelViewer('piece-viewer', pieceGLB, true);
+            
+            // Note: To use STL files instead, change the paths above to:
+            // window.initModelViewer('gripper-viewer', gripperSTL, false);
+            // window.initModelViewer('piece-viewer', pieceSTL, false);
+        });
+    </script>
+    <script>
+    </script>
     <script>
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
