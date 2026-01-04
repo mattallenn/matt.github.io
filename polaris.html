@@ -155,7 +155,7 @@
 
         p,
         li {
-            font-size: 0.65rem;
+            font-size: 0.8rem;
             color: #b0bec5;
             line-height: 1.8;
         }
@@ -556,8 +556,7 @@ while True:
         }
 
         function animate(currentTime) {
-            // Use the 0.3 opacity to prevent trail clutter
-            ctx.fillStyle = 'rgba(10, 10, 15, 0.3)';
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.5)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             stars.forEach(star => {

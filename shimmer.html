@@ -4,8 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Matthew Allen | Portfolio</title>
+    <title>Shimmer Project | Matthew Allen Portfolio</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
     <style>
         * {
             box-sizing: border-box;
@@ -62,7 +66,6 @@
             text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
         }
 
-        /* Updated Navigation - styled to match original */
         .nav-wrapper {
             position: fixed;
             top: 20px;
@@ -93,8 +96,6 @@
         nav a {
             font-size: 0.65rem;
             padding: 0.5rem 1rem;
-            position: relative;
-            transition: all 0.3s ease;
             border-radius: 20px;
             color: #64ffda;
         }
@@ -102,22 +103,21 @@
         nav a:hover {
             background: rgba(100, 255, 218, 0.1);
             color: #00d9ff;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
         }
 
         nav a.active {
             background: rgba(100, 255, 218, 0.15);
             color: #00d9ff;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
         }
 
         main {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
-            padding-top: 100px;
+            padding-top: 140px;
         }
 
+        /* Keep section styles for compatibility, though we use .project-content */
         section {
             min-height: 100vh;
             display: flex;
@@ -141,28 +141,6 @@
             color: #64ffda;
             text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
             letter-spacing: 0.1em;
-            font-family: 'Press Start 2P', cursive;
-            min-height: 2.5rem;
-        }
-
-        .terminal-cursor {
-            display: inline-block;
-            width: 0.6em;
-            height: 1em;
-            background-color: #64ffda;
-            margin-left: 0.1em;
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-            box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
-        }
-
-        @keyframes blink {
-            0%, 50% {
-                opacity: 1;
-            }
-            50.01%, 100% {
-                opacity: 0;
-            }
         }
 
         h2 {
@@ -172,6 +150,15 @@
             text-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
             border-bottom: 2px solid rgba(100, 255, 218, 0.3);
             padding-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #64ffda;
+            text-shadow: 0 0 12px rgba(100, 255, 218, 0.25);
             letter-spacing: 0.05em;
         }
 
@@ -187,93 +174,8 @@
             color: #00d9ff;
             font-size: 0.7rem;
             margin-top: 1rem;
+            margin-bottom: 3rem;
             text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .project-card {
-            background: rgba(20, 20, 30, 0.6);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 2px solid rgba(100, 255, 218, 0.2);
-            display: block;
-            transition: all 0.4s ease;
-            transform-style: preserve-3d;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(100, 255, 218, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .project-card:hover::before {
-            opacity: 1;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: #64ffda;
-            box-shadow: 0 10px 30px rgba(100, 255, 218, 0.3);
-        }
-
-        .project-card img {
-            width: 100%;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            border: 1px solid rgba(100, 255, 218, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .project-card:hover img {
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.4);
-        }
-
-        .project-title {
-            font-size: 0.8rem;
-            margin-bottom: 1rem;
-            color: #64ffda;
-            line-height: 1.4;
-        }
-
-        .hobbies-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .hobbies-list li {
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: rgba(20, 20, 30, 0.6);
-            border-left: 3px solid #64ffda;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .hobbies-list li:hover {
-            background: rgba(30, 30, 40, 0.8);
-            transform: translateX(10px);
-            border-left-color: #00d9ff;
-        }
-
-        .contact-info {
-            text-align: center;
-            font-size: 0.65rem;
-            line-height: 2.5;
         }
 
         footer {
@@ -291,6 +193,108 @@
             right: 0;
             z-index: 101;
         }
+
+        /* --- NEW STYLES FOR PROJECT PAGE --- */
+
+        /* This centers your content and gives it a max-width */
+        .project-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Style for the disclaimer */
+        .project-content .disclaimer {
+            font-size: 0.6rem;
+            font-style: italic;
+            color: #b0bec5;
+            text-align: center;
+            max-width: 700px;
+            margin: 2rem auto 3rem auto;
+            border: 1px dashed rgba(100, 255, 218, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(20, 20, 30, 0.4);
+            line-height: 1.6;
+        }
+
+        /* Styles for your project images */
+        .project-content img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 1.5rem auto 1.5rem auto;
+            display: block;
+            border: 2px solid rgba(100, 255, 218, 0.2);
+            background: rgba(20, 20, 30, 0.4);
+        }
+
+        /* Grid container for images */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .image-grid img {
+            margin: 0;
+            width: 100%;
+        }
+        
+        /* Spacing for paragraphs */
+        .project-content p {
+            margin-bottom: 2rem;
+        }
+
+        /* Spacing for headings */
+        .project-content h2 {
+            margin-top: 3rem;
+        }
+
+        /* Styles for your code blocks */
+        pre[class*="language-"] {
+            background: rgba(0, 0, 0, 0.7) !important;
+            font-size: 0.6rem !important;
+            line-height: 1.6;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            margin: 1.5rem 0 1.5rem 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        code[class*="language-"] {
+            background: transparent !important;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: none;
+        }
+        
+        /* Style for the "Back" link */
+        .back-nav {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 1rem;
+            display: block;
+            background: rgba(20, 20, 30, 0.6);
+            border: 2px solid rgba(100, 255, 218, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-nav a {
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        .back-nav:hover {
+            border-color: #64ffda;
+            background: rgba(30, 30, 40, 0.8);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(100, 255, 218, 0.2);
+        }
+
+        /* --- END OF NEW STYLES --- */
+
 
         @media (max-width: 768px) {
             h1 {
@@ -316,10 +320,6 @@
                 font-size: 0.5rem;
                 padding: 0.5rem;
             }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -343,142 +343,213 @@
 
     <div class="nav-wrapper">
         <nav>
-            <a href="#home">HOME</a>
-            <a href="#projects">PROJECTS</a>
-            <a href="#hobbies">HOBBIES</a>
-            <a href="#about">ABOUT</a>
-            <a href="#contact">CONTACT</a>
+            <a href="index.html#home">HOME</a>
+            <a href="index.html#projects">PROJECTS</a>
+            <a href="index.html#hobbies">HOBBIES</a>
+            <a href="index.html#about">ABOUT</a>
+            <a href="index.html#contact">CONTACT</a>
         </nav>
     </div>
 
     <main>
-        <section id="home" aria-label="Introduction">
-            <h1 id="typed-name"></h1>
-            <p class="subtitle">[ MECHATRONICS STUDENT | BUILDER | CREATOR ]</p>
-        </section>
+        <h1>SHIMMER</h1>
+        <p class="subtitle">[ FLIGHT CONTROLLER PCB ]</p>
 
-        <section id="projects" aria-label="Projects">
-            <h2>&gt; PROJECTS_</h2>
-            <div class="projects-grid">
-                <a href="shimmer.html" class="project-card" aria-label="Shimmer">
-                    <img src="images/shimmer_front.png" alt="Shimmer Flight Controller PCB" loading="lazy" />
-                    <h3 class="project-title">SHIMMER - FLIGHT CONTROLLER PCB</h3>
-                    <p>
-                        Shimmer is a custom STM32 based flight controller developed to stabilize the flight of 
-                        a remote controlled plane / drone. Created in KiCad, this FC uses common components to
-                        receive inputs from a controller, stabilize the aircraft with software and sensors, and 
-                        output PWM commands to control servos or ESCs. These boards can be purchased for less than $20,
-                        including all necessary components.
-                    </p>
-                </a>
+        
+        <div class="project-content">
 
-                <a href="polaris.html" class="project-card" aria-label="Polaris">
-                    <img src="images/polaris-cad.jpg" alt="Polaris launchpad" loading="lazy" />
-                    <h3 class="project-title">POLARIS - ACTIVELY STABILIZED LAUNCHPAD</h3>
-                    <p>
-                        Lead Software Engineer at Purdue Orbital. Developing Polaris, a cold-gas thruster system designed to actively stabilize rocket launchpads before launch. Developed guidance, navigation, and control software integrating electrical components, including an RP2040 microcontroller interfacing with sensors and solenoids. Worked on PID control algorithms to counteract air disturbances, tuning through ground tests. Currently engineering a flight-weight system.
-                    </p>
-                </a>
-
-                <a href="chessmate.html" class="project-card" aria-label="ChessMate">
-                    <img src="images/Chessmate.jpeg" alt="Chess Robot" loading="lazy" />
-                    <h3 class="project-title">CHESSMATE - ROBOTIC CHESS OPPONENT</h3>
-                    <p>
-                        Designing a robotic chessboard capable of online gameplay against humans and a locally ran chess engine. Integrated mechanical design with custom 3D-printed indexed chess pieces and a mechanical gripper. Developed software in Python to generate G-Code, scrape online chess platforms, and interface with Arduino for piece manipulation. Future goals include full online integration, computer vision for piece tracking, and a custom robotic arm gantry system.
-                    </p>
-                </a>
-
-                <a href="keyboard.html" class="project-card" aria-label="Keyboard">
-                    <img src="images/keyboard.jpg" alt="Custom keyboard" loading="lazy" />
-                    <h3 class="project-title">CUSTOM MECHANICAL KEYBOARD</h3>
-                    <p>
-                        Built a fully custom, split ortholinear mechanical keyboard featuring 3D-printed cases, hand-soldered switch matrices, and custom firmware based on Arduino Nano and QMK.
-                    </p>
-                </a>
-
-                <a href="drum-riser.html" class="project-card" aria-label="Drum Riser">
-                    <img src="images/drum-riser.jpeg" alt="Drum Riser" loading="lazy" />
-                    <h3 class="project-title">DRUM RISER</h3>
-                    <p>
-                        Built a custom drum riser to dampen sound, limit vibrations, and provide a stable platform for my e-kit. Constructed from plywood and tennis balls. Entire project cost less than $50.
-                    </p>
-                </a>
-            </div>
-        </section>
-
-        <section id="hobbies" aria-label="Hobbies">
-            <h2>&gt; HOBBIES_</h2>
-            <ul class="hobbies-list">
-                <li>[ SNOWBOARDING & MOTORCYCLE RIDING ]</li>
-                <li>[ MUSIC: DRUMS, GUITAR, RECORDING ]</li>
-                <li>[ FABRICATION & WOODWORKING ]</li>
-                <li>[ PROGRAMMING & ELECTRONICS ]</li>
-                <li>[ 3D PRINTING & CAD ]</li>
-            </ul>
-        </section>
-
-        <section id="about" aria-label="About">
-            <h2>&gt; ABOUT_</h2>
+            <h2>&gt; OVERVIEW_</h2>
             <p>
-                I'm a Junior studying Mechatronics Engineering Technology at Purdue University.
-                Experience in software development, embedded systems, electrical engineering, and mechanical design.
-                Passionate about aerospace, robotics, and creating things that interest me.
-                Feel free to reach out!
-            </p>
-        </section>
+                 Shimmer is a fully custom STM32 based flight controller I designed in KiCad. 
+                 Rather than using an off the shelf flight controller, I wanted to try
+                 and design my own, mainly to learn more about PCB design and embedded systems.
+                 I started out with a prototype breadboard, moved to an Arduino Nano PCB baseboard,
+                 and then finally created a custom STM32 PCB.
+                 I've also built an RC plane from scratch as a testbed for this FC. 
+                 More on that later...
 
-        <section id="contact" aria-label="Contact">
-            <h2>&gt; CONTACT_</h2>
-            <p class="contact-info">
-                EMAIL: <a href="mailto:matthewallen442@gmail.com">matthewallen442@gmail.com</a><br />
-                LINKEDIN: <a href="https://linkedin.com/in/mattallenn" target="_blank"
-                    rel="noopener noreferrer">linkedin.com/in/mattallenn</a>
+                 <br>
+                 <br>
+
+                 This project was my first real experience with PCB design, and I'm sure 
+                 that my design is far from optimal. It was definitely challenging, but
+                 I really enjoyed the process.  
+
+                 <br>
+                 <br>
+
+                 If you're interested in learning more about PCB design, I highly recommend
+                 checking out Phil's Lab tutorials on YouTube. 
+
+                 
+                <img src="images/shimmer_front.png" alt="Chess Robot" loading="lazy" />
+
             </p>
-        </section>
+
+            <h2>&gt; DETAILS_</h2>
+            <p>
+                "Shimmer" comes from a type of reverb effect that shares the same name. 
+                 I think it sounds cool, so I named the FC after it.
+
+            </p>
+
+            <h3>&gt; PROTOTYPE DEVELOPMENT_</h3>
+            <p>
+                For an initial prototype, I used an Arduino Nano and an MPU6050 breakout board
+                to measure orientation in degrees (roll, pitch, yaw). 
+                <br>
+                <br>
+                The MPU6050 contains an accelerometer and a gyroscope. Although both of these can 
+                measure orientation, they both have downfalls.  
+                To correct for this, I used a complementary filter, which fuses the data from both.
+
+
+            </p>
+
+            <h3>&gt; BASEBOARD DESIGN_</h3>
+            <p>
+                Once I had the prototype figured out, I designed a custom PCB "baseboard". This
+                connects the Arduino and other modules together more securely and neatly. This method has many pros and cons.
+                <br>
+                <br>
+
+                </p>
+
+                
+                Pros:
+
+                <ul>
+                    <li>Cheap, if you already have modules</li>
+                    <li>Quick to design</li>
+                    <li>Less prone to initial errors</li>
+                    <li>Far simpler than a full PCB</li>
+                </ul>
+                <br>
+
+
+                Cons:
+                <ul>
+                    <li>Larger</li>
+                    <li>Limited component choice and implementation</li>
+                    <li>Far less powerful (depending on MCU)</li>
+                    <li>Less polished</li>
+                </ul>
+
+            </p>
+
+            <h3>&gt; V1.0 PCB DESIGN_</h3>
+            <p>
+            Designing the first PCB was fairly straightforward. Wire everything up on a schematic,
+            just like it was done on the breadboard, and then route the PCB. 
+
+                <img src="images/shimmer_v1_sch.png" alt="Schematic" loading="lazy" />
+
+            </p>
+
+            <p>
+                After the schematic was complete, I then layed out all of the components and routed them.
+                <img src="images/shimmer_v1_pcb.png" alt="v1 pcb" loading="lazy" />
+
+            </p>
+
+            <p>
+                The 3D Render looks like this:
+                <img src="images/Shimmer_v1_front.png" alt="v1 pcb" loading="lazy" />
+            </p>
+
+            <p>
+                I ordered V1.0 PCBs through PCBWay, and should have them delivered soon.
+
+                <br>
+                <br>
+                
+            </p>
+
+            <h3>&gt; V2.0 DESIGN_</h3>
+            <p>
+                After the V1.0 was complete, I then began designing V2.0.
+                 Shimmer contains the following components:
+                 <ul>
+                    <li>STMF103C8T6 Microcontroller (Brains)</li>
+                    <li>MPU6050 Interial Measurement Unit (Orientation Sensor)</li>
+                    <li>5V Voltage Regulator (Power Supply)</li>
+                    <li>Crystal Oscillator (Clock)</li>
+                    <li>4 Inputs for RC Receiver Channels (Or PPM)</li>
+                    <li>4 PWM Outputs for Controlling Servos / ESCs</li>
+                    <li>UART, SPI, and SWD headers for additional communication</li>   
+                    <li>Micro USB connector for programming and bench power</li>
+
+
+                    
+                 </ul>
+            </p>
+
+            <h3>&gt; SCHEMATIC DESIGN_</h3>
+            <P>Once I had components selected and criteria defined, I created a 
+                schematic.
+
+                <img src="images/schm1.png" alt="Schematic 1" loading="lazy" />
+                <div class="image-grid">
+                    <img src="images/schm2.png" alt="Schematic 2" loading="lazy" />
+                    <img src="images/schm4.png" alt="Schematic 3" loading="lazy" />
+                    <img src="images/schm3.png" alt="Schematic 4" loading="lazy" />
+                    <img src="images/schm5.png" alt="Schematic 5" loading="lazy" />
+                </div>
+            </P>
+
+            <h3>&gt; PCB LAYOUT_</h3>
+            <p>
+                Laying out and routing all of the traces for this PCB was super fun and rewarding.
+                After a few iterations, I landed on this: 
+                (The pink box in the middle is from my logo on the back silkscreen.)
+
+                <img src="images/shimmer_pcb.png" alt="pcb layout" loading="lazy" />
+
+                The MCU is positioned near the middle, with the decoupling capacitors and crystal
+                oscillator as close as possible. The IMU is right above. I included a switch to
+                put the MCU in boot mode which allows me to program it easily. 
+
+                <br>
+                <br>
+                Other important features include:
+                <ul>
+                    <li>
+                        Power Switcher: U4 is an LM66200 Dual Ideal Diode with automatic switchover.
+                        This just means that I can power the board by either 5V from the ESC's battery 
+                        elimator circuit (BEC), or USB.
+                    </li>
+                    <li>Debug LEDS: I've positioned an LED to indicate if the board has power, and 3
+                        programmable LEDs for debugging and status updates.
+                    </li>
+                </ul>
+
+            </p>
+
+            <p>
+                That's all I've got so far for this project! I'm currently working on the firmware and 
+               a small plane to use as a test platform. Here's some cool renders of the front and back of the board.
+
+            <div class="image-grid">
+                    <img src="images/shimmer_front.png" alt="PCB Front" loading="lazy" />
+                    <img src="images/shimmer_back.png" alt="PCB Back" loading="lazy" />
+            </div>
+            </p>
+
+            <nav class="back-nav">
+                <a href="index.html">← BACK TO PORTFOLIO</a>
+            </nav>
+
+        </div>
     </main>
 
     <footer>
         [ THANKS FOR VISITING ] - MATT
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
     <script>
-        // Terminal typing effect for name
-        const nameElement = document.getElementById('typed-name');
-        const nameText = 'MATTHEW ALLEN';
-        let charIndex = 0;
-        let cursorElement;
-
-        function createCursor() {
-            cursorElement = document.createElement('span');
-            cursorElement.className = 'terminal-cursor';
-            nameElement.appendChild(cursorElement);
-        }
-
-        function typeWriter() {
-            if (charIndex < nameText.length) {
-                // Remove cursor temporarily
-                if (cursorElement && cursorElement.parentNode) {
-                    cursorElement.remove();
-                }
-                
-                // Add next character
-                const textNode = document.createTextNode(nameText.charAt(charIndex));
-                nameElement.appendChild(textNode);
-                
-                // Re-add cursor
-                createCursor();
-                
-                charIndex++;
-                setTimeout(typeWriter, 100); // Typing speed
-            }
-        }
-
-        // Start with just the cursor blinking for a moment
-        setTimeout(() => {
-            createCursor();
-            setTimeout(typeWriter, 500); // Wait before typing starts
-        }, 500);
-
         // Starfield canvas animation
         const canvas = document.getElementById('starfield');
         const ctx = canvas.getContext('2d');
@@ -493,6 +564,7 @@
         const shootingStarMinInterval = 5000;
         const shootingStarMaxInterval = 15000;
         let nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
+
 
         class Star {
             constructor() {
@@ -510,6 +582,7 @@
             update() {
                 this.y += this.speed;
 
+                // Wrap around instead of resetting
                 if (this.y > canvas.height) {
                     this.y = -10;
                 }
@@ -517,17 +590,20 @@
                     this.y = canvas.height;
                 }
 
+                // Twinkle effect
                 if (this.isTwinkling) {
                     this.opacity += this.twinkleSpeed * this.twinkleDirection;
                     if (this.opacity >= this.z || this.opacity <= 0.2) {
                         this.twinkleDirection *= -1;
                     }
 
+                    // Randomly stop twinkling
                     if (Math.random() > 0.995) {
                         this.isTwinkling = false;
                         this.opacity = this.z;
                     }
                 } else {
+                    // Randomly start twinkling
                     if (Math.random() > 0.998) {
                         this.isTwinkling = true;
                     }
@@ -589,6 +665,7 @@
             }
         }
 
+
         for (let i = 0; i < numStars; i++) {
             stars.push(new Star());
         }
@@ -628,9 +705,8 @@
             canvas.height = window.innerHeight;
         });
 
-        // Scroll animations with nav highlighting
+        // Scroll animations
         const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('nav a');
 
         const observerOptions = {
             threshold: 0.2,
@@ -641,23 +717,14 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    
-                    // Update Nav Highlight
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href').substring(1) === entry.target.id) {
-                            link.classList.add('active');
-                        }
-                    });
                 }
             });
         }, observerOptions);
 
-        sections.forEach(section => {
-            observer.observe(section);
-        });
+        sections.forEach(section => observer.observe(section));
     </script>
 
 </body>
 
 </html>
+
