@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Matthew Allen | Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -18,35 +17,23 @@
         }
 
         body {
-            font-family: 'Press Start 2P', cursive;
-            background: #0a0a0f;
-            color: #e0e0e0;
-            line-height: 1.8;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #05060a;
+            color: #e5e7eb;
+            line-height: 1.7;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Starfield background */
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-        }
-
-        /* Animated gradient overlay */
+        /* Soft vignette background overlay */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.3) 0%, rgba(10, 10, 15, 0.8) 100%);
+            inset: 0;
+            background:
+                radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 55%),
+                radial-gradient(circle at bottom right, rgba(45, 212, 191, 0.10), transparent 55%),
+                radial-gradient(ellipse at center, rgba(15, 23, 42, 0.9), rgba(3, 7, 18, 0.95));
             pointer-events: none;
             z-index: -1;
         }
@@ -133,29 +120,29 @@
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 1rem;
             text-align: center;
             color: #64ffda;
-            text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
-            letter-spacing: 0.1em;
+            text-shadow: 0 0 16px rgba(100, 255, 218, 0.4);
+            letter-spacing: 0.08em;
         }
 
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin-bottom: 2rem;
             color: #64ffda;
-            text-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
-            border-bottom: 2px solid rgba(100, 255, 218, 0.3);
+            text-shadow: 0 0 12px rgba(100, 255, 218, 0.25);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
             padding-bottom: 1rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
         }
 
         p,
         li {
-            font-size: 0.65rem;
-            color: #b0bec5;
-            line-height: 1.8;
+            font-size: 0.95rem;
+            color: #9ca3af;
+            line-height: 1.7;
         }
 
         .subtitle {
@@ -296,8 +283,6 @@
 
 <body>
 
-    <canvas id="starfield"></canvas>
-
     <a href="https://github.com/mattallenn" class="github-corner" aria-label="View source on GitHub">
         <svg width="80" height="80" viewBox="0 0 250 250"
             style="fill:#64ffda; color:#0a0a0f; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
@@ -400,175 +385,6 @@
     </footer>
 
     <script>
-        // Starfield canvas animation
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const stars = [];
-        const numStars = 200;
-        const shootingStars = []; // Array to hold shooting stars
-        let lastShootingStarTime = 0;
-        const shootingStarMinInterval = 5000; // Minimum 5 seconds between shooting stars
-        const shootingStarMaxInterval = 15000; // Maximum 15 seconds between shooting stars
-        let nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
-
-
-        class Star {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.z = Math.random() * 2;
-                this.size = Math.random() * 1.5;
-                this.speed = Math.random() * 0.2 + 0.1;
-                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
-                this.twinkleDirection = Math.random() > 0.5 ? 1 : -1;
-                this.opacity = this.z;
-                this.isTwinkling = Math.random() > 0.7;
-            }
-
-            update() {
-                this.y += this.speed;
-
-                // Wrap around instead of resetting
-                if (this.y > canvas.height) {
-                    this.y = -10;
-                }
-                if (this.y < -10) {
-                    this.y = canvas.height;
-                }
-
-                // Twinkle effect
-                if (this.isTwinkling) {
-                    this.opacity += this.twinkleSpeed * this.twinkleDirection;
-                    if (this.opacity >= this.z || this.opacity <= 0.2) {
-                        this.twinkleDirection *= -1;
-                    }
-
-                    // Randomly stop twinkling
-                    if (Math.random() > 0.995) {
-                        this.isTwinkling = false;
-                        this.opacity = this.z;
-                    }
-                } else {
-                    // Randomly start twinkling
-                    if (Math.random() > 0.998) {
-                        this.isTwinkling = true;
-                    }
-                }
-            }
-
-            draw() {
-                ctx.fillStyle = `rgba(100, 255, 218, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // NEW: Shooting Star class
-        class ShootingStar {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                // Start from top-left to bottom-right (or similar diagonal)
-                this.x = -Math.random() * canvas.width * 0.5; // Start off-screen left
-                this.y = Math.random() * canvas.height * 0.3; // Start from top third of screen
-                this.length = Math.random() * 100 + 50; // Length of the tail
-                this.speedX = Math.random() * 5 + 3; // Horizontal speed
-                this.speedY = Math.random() * 2 + 1; // Vertical speed
-                this.opacity = 1;
-                this.brightness = Math.random() * 0.5 + 1.0; // Brighter than regular stars
-                this.color = `rgba(255, 255, 255, ${this.opacity})`;
-                this.fadeSpeed = 0.02; // How quickly it fades out after reaching max travel
-                this.active = true;
-            }
-
-            update() {
-                if (!this.active) return;
-
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                // Fade out once it's mostly across the screen
-                if (this.x > canvas.width * 0.6) { // Start fading when it's passed more than half the screen
-                    this.opacity -= this.fadeSpeed;
-                    this.color = `rgba(255, 255, 255, ${Math.max(0, this.opacity)})`;
-                }
-
-                if (this.opacity <= 0) {
-                    this.active = false;
-                }
-            }
-
-            draw() {
-                if (!this.active) return;
-
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x - this.length * (this.speedX / (this.speedX + this.speedY)), this.y - this.length * (this.speedY / (this.speedX + this.speedY)));
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 1.5;
-                ctx.lineCap = 'round';
-
-                // === REMOVE THESE LINES ===
-                // Add a glow effect
-                // ctx.shadowColor = `rgba(255, 255, 255, ${this.opacity * 0.8})`;
-                // ctx.shadowBlur = 10 * this.brightness;
-                // === END OF REMOVAL ===
-
-                ctx.stroke();
-
-                // === REMOVE THIS LINE TOO ===
-                // ctx.shadowBlur = 0; // Reset shadow blur
-            }
-        }
-
-
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
-        }
-
-        function animate(currentTime) {
-            ctx.fillStyle = 'rgba(10, 10, 15, 0.5)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            stars.forEach(star => {
-                star.update();
-                star.draw();
-            });
-
-            // NEW: Shooting star generation and update
-            if (currentTime - lastShootingStarTime > nextShootingStarInterval) {
-                shootingStars.push(new ShootingStar());
-                lastShootingStarTime = currentTime;
-                nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
-            }
-
-            for (let i = shootingStars.length - 1; i >= 0; i--) {
-                const sStar = shootingStars[i];
-                sStar.update();
-                sStar.draw();
-
-                if (!sStar.active) {
-                    shootingStars.splice(i, 1); // Remove inactive shooting stars
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        animate(0); // Call animate with initial time
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
         // Scroll animations
         const sections = document.querySelectorAll('section');
         const header = document.getElementById('header');

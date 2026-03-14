@@ -5,9 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Shimmer Project | Matthew Allen Portfolio</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 
     <style>
@@ -17,58 +15,70 @@
             padding: 0;
         }
 
+        :root {
+            --bg: #050507;
+            --bg-card: rgba(10, 10, 14, 0.85);
+            --bg-nav: rgba(5, 5, 7, 0.9);
+            --text: #ffffff;
+            --text-muted: #8a8a9a;
+            --accent: #ffffff; 
+            --accent-border: rgba(255, 255, 255, 0.25);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Press Start 2P', cursive;
-            background: #0a0a0f;
-            color: #e0e0e0;
-            line-height: 1.8;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Starfield background */
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 100%);
-        }
-
-        /* Animated gradient overlay */
+        /* Subtle grain texture overlay */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.3) 0%, rgba(10, 10, 15, 0.8) 100%);
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
-            z-index: -1;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* Ambient gradient */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -40%;
+            left: -20%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         a {
-            color: #64ffda;
+            color: var(--accent);
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: color 0.2s ease, opacity 0.2s ease;
         }
 
         a:hover {
-            color: #00d9ff;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            color: #fff;
+            opacity: 0.8;
         }
 
+        /* Navigation */
         .nav-wrapper {
             position: fixed;
-            top: 20px;
+            top: 24px;
             left: 0;
             right: 0;
             display: flex;
@@ -81,52 +91,52 @@
             pointer-events: auto;
             display: inline-flex;
             justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            background: rgba(20, 20, 30, 0.4);
-            backdrop-filter: blur(10px);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            border: 1px solid rgba(100, 255, 218, 0.15);
-            margin: 0 auto;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-nav);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 0.8rem 1.5rem;
             width: fit-content;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         nav a {
-            font-size: 0.65rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            color: #64ffda;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
         }
 
-        nav a:hover {
-            background: rgba(100, 255, 218, 0.1);
-            color: #00d9ff;
+        nav a:hover, nav a.active {
+            color: var(--text);
         }
 
-        nav a.active {
-            background: rgba(100, 255, 218, 0.15);
-            color: #00d9ff;
+        .nav-separator {
+            color: var(--border);
+            user-select: none;
+            font-weight: 300;
         }
 
         main {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 2rem;
             padding-top: 140px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Keep section styles for compatibility, though we use .project-content */
         section {
-            min-height: 100vh;
+            min-height: calc(100vh - 140px);
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 4rem 0;
+            justify-content: flex-start;
+            padding: 2rem 0 6rem 0;
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s ease;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         section.visible {
@@ -135,190 +145,233 @@
         }
 
         h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            text-align: center;
-            color: #64ffda;
-            text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
-            letter-spacing: 0.1em;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            line-height: 1.1;
+            margin-left: -2px; 
+            text-align: left;
         }
 
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            margin-top: 0.5rem;
+            margin-bottom: 4rem;
+            text-align: left;
+            text-transform: uppercase;
+        }
+
+        /* Section headings */
         h2 {
-            font-size: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-top: 4rem;
             margin-bottom: 2rem;
-            color: #64ffda;
-            text-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
-            border-bottom: 2px solid rgba(100, 255, 218, 0.3);
-            padding-bottom: 1rem;
-            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
         }
 
         h3 {
-            font-size: 1.1rem;
-            margin-top: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: #64ffda;
-            text-shadow: 0 0 12px rgba(100, 255, 218, 0.25);
-            letter-spacing: 0.05em;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--text);
+            text-transform: uppercase;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
         }
 
         p,
         li {
-            font-size: 0.8rem;
-            color: #b0bec5;
+            font-size: 1rem;
+            color: var(--text-muted);
             line-height: 1.8;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #00d9ff;
-            font-size: 0.7rem;
-            margin-top: 1rem;
-            margin-bottom: 3rem;
-            text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 2px solid rgba(100, 255, 218, 0.2);
-            color: #64ffda;
-            font-size: 0.6rem;
-            margin-top: 4rem;
-        }
-
-        .github-corner {
-            position: fixed;
-            top: 0;
-            right: 0;
-            z-index: 101;
-        }
-
-        /* --- NEW STYLES FOR PROJECT PAGE --- */
-
-        /* This centers your content and gives it a max-width */
-        .project-content {
             max-width: 800px;
-            margin: 0 auto;
+        }
+
+        .project-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Project content container */
+        .project-content {
+            width: 100%;
+            margin: 0;
+            text-align: left;
         }
 
         /* Style for the disclaimer */
         .project-content .disclaimer {
-            font-size: 0.6rem;
+            font-size: 0.85rem;
             font-style: italic;
-            color: #b0bec5;
-            text-align: center;
-            max-width: 700px;
-            margin: 2rem auto 3rem auto;
-            border: 1px dashed rgba(100, 255, 218, 0.3);
-            padding: 1rem;
-            border-radius: 8px;
-            background: rgba(20, 20, 30, 0.4);
-            line-height: 1.6;
+            color: var(--text-muted);
+            border-left: 2px solid var(--border);
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 0 4px 4px 0;
         }
 
-        /* Styles for your project images */
-        .project-content img {
-            width: 100%;
-            border-radius: 8px;
-            margin: 1.5rem auto 1.5rem auto;
+        /* Images - Made smaller and centered */
+        .project-content > img {
+            width: 100%; 
+            max-width: 750px; /* Constrain the size */
+            border-radius: 6px;
+            margin: 2.5rem auto; /* Center horizontally */
             display: block;
-            border: 2px solid rgba(100, 255, 218, 0.2);
-            background: rgba(20, 20, 30, 0.4);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
         }
 
         /* Grid container for images */
         .image-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin: 1.5rem 0;
+            gap: 1.5rem;
+            max-width: 850px; /* Constrain the grid size slightly */
+            margin: 2.5rem auto; /* Center horizontally */
         }
 
         .image-grid img {
             margin: 0;
             width: 100%;
+            height: 100%;
+            border-radius: 6px;
+            display: block;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
         }
         
-        /* Spacing for paragraphs */
-        .project-content p {
-            margin-bottom: 2rem;
-        }
-
-        /* Spacing for headings */
-        .project-content h2 {
-            margin-top: 3rem;
-        }
-
-        /* Styles for your code blocks */
+        /* Code blocks */
         pre[class*="language-"] {
-            background: rgba(0, 0, 0, 0.7) !important;
-            font-size: 0.6rem !important;
+            background: rgba(10, 10, 14, 0.8) !important;
+            font-size: 0.85rem !important;
             line-height: 1.6;
-            border-radius: 8px;
-            padding: 1rem;
+            border-radius: 6px;
+            padding: 1.5rem;
             overflow-x: auto;
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            margin: 1.5rem 0 1.5rem 0;
-            font-family: 'Courier New', Courier, monospace;
+            border: 1px solid var(--border);
+            margin: 2rem 0;
         }
 
         code[class*="language-"] {
-            background: transparent !important;
             font-family: 'Courier New', Courier, monospace;
             text-shadow: none;
         }
         
-        /* Style for the "Back" link */
+        /* Back Navigation */
         .back-nav {
-            text-align: center;
-            margin-top: 4rem;
-            padding: 1rem;
-            display: block;
-            background: rgba(20, 20, 30, 0.6);
-            border: 2px solid rgba(100, 255, 218, 0.2);
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: inline-block;
         }
         
         .back-nav a {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .back-nav a:hover {
+            color: var(--text);
+            transform: translateX(-5px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
             font-size: 0.75rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.15em;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .back-nav:hover {
-            border-color: #64ffda;
-            background: rgba(30, 30, 40, 0.8);
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(100, 255, 218, 0.2);
+        /* GitHub corner */
+        .github-corner {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 101;
+            opacity: 0.4;
+            transition: opacity 0.2s ease;
         }
 
-        /* --- END OF NEW STYLES --- */
-
+        .github-corner:hover {
+            opacity: 0.9;
+        }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.2rem;
-            }
-
-            h2 {
-                font-size: 1rem;
+                font-size: clamp(2rem, 8vw, 2.5rem);
             }
 
             .nav-wrapper {
                 top: auto;
                 bottom: 20px;
+                background: none;
             }
 
             nav {
-                width: 90%;
-                justify-content: space-around;
-                gap: 0;
+                width: 92%;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.8rem;
+                border: 1px solid var(--border);
             }
 
             nav a {
-                font-size: 0.5rem;
-                padding: 0.5rem;
+                font-size: 0.7rem;
+            }
+
+            .nav-separator {
+                font-size: 0.7rem;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-content > img, .image-grid {
+                max-width: 100%; /* Let images fill screen on mobile */
+            }
+
+            main {
+                padding: 0 1.25rem;
+                padding-top: 100px;
             }
         }
     </style>
@@ -326,11 +379,9 @@
 
 <body>
 
-    <canvas id="starfield"></canvas>
-
     <a href="https://github.com/mattallenn" class="github-corner" aria-label="View source on GitHub">
-        <svg width="80" height="80" viewBox="0 0 250 250"
-            style="fill:#64ffda; color:#0a0a0f; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+        <svg width="60" height="60" viewBox="0 0 250 250"
+            style="fill:#ffffff; color:#050507; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
             <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z" />
             <path
                 d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -343,91 +394,81 @@
 
     <div class="nav-wrapper">
         <nav>
-            <a href="index.html#home">HOME</a>
-            <a href="index.html#projects">PROJECTS</a>
-            <a href="index.html#hobbies">HOBBIES</a>
-            <a href="index.html#about">ABOUT</a>
-            <a href="index.html#contact">CONTACT</a>
+            <a href="index.html#home">Home</a>
+            <span class="nav-separator">|</span>
+            <a href="index.html#projects">Projects</a>
+            <span class="nav-separator">|</span>
+            <a href="index.html#hobbies">Hobbies</a>
+            <span class="nav-separator">|</span>
+            <a href="index.html#about">About</a>
+            <span class="nav-separator">|</span>
+            <a href="index.html#contact">Contact</a>
         </nav>
     </div>
 
     <main>
-        <h1>SHIMMER</h1>
-        <p class="subtitle">[ FLIGHT CONTROLLER PCB ]</p>
+        <section>
+            <h1>SHIMMER</h1>
+            <p class="subtitle">FLIGHT CONTROLLER PCB</p>
+            
+            <div class="project-content">
 
-        
-        <div class="project-content">
-
-            <h2>&gt; OVERVIEW_</h2>
-            <p>
-                 Shimmer is a fully custom STM32 based flight controller I designed in KiCad. 
-                 Rather than using an off the shelf flight controller, I wanted to try
-                 and design my own, mainly to learn more about PCB design and embedded systems.
-                 I started out with a prototype breadboard, moved to an Arduino Nano PCB baseboard,
-                 and then finally created a custom STM32 PCB.
-                 I've also built an RC plane from scratch as a testbed for this FC. 
-                 More on that later...
-
-                 <br>
-                 <br>
-
-                 This project was my first real experience with PCB design, and I'm sure 
-                 that my design is far from optimal. It was definitely challenging, but
-                 I really enjoyed the process.  
-
-                 <br>
-                 <br>
-
-                 If you're interested in learning more about PCB design, I highly recommend
-                 checking out Phil's Lab tutorials on YouTube. 
-
-                 
-                <img src="images/shimmer_front.png" alt="Chess Robot" loading="lazy" />
-
-            </p>
-
-            <h2>&gt; DETAILS_</h2>
-            <p>
-                "Shimmer" comes from a type of reverb effect that shares the same name. 
-                 I think it sounds cool, so I named the FC after it.
-
-            </p>
-
-            <h3>&gt; PROTOTYPE DEVELOPMENT_</h3>
-            <p>
-                For an initial prototype, I used an Arduino Nano and an MPU6050 breakout board
-                to measure orientation in degrees (roll, pitch, yaw). 
-                <br>
-                <br>
-                The MPU6050 contains an accelerometer and a gyroscope. Although both of these can 
-                measure orientation, they both have downfalls.  
-                To correct for this, I used a complementary filter, which fuses the data from both.
-
-
-            </p>
-
-            <h3>&gt; BASEBOARD DESIGN_</h3>
-            <p>
-                Once I had the prototype figured out, I designed a custom PCB "baseboard". This
-                connects the Arduino and other modules together more securely and neatly. This method has many pros and cons.
-                <br>
-                <br>
-
+                <h2>Overview</h2>
+                <p>
+                    Shimmer is a fully custom STM32 based flight controller I designed in KiCad. 
+                    Rather than using an off the shelf flight controller, I wanted to try
+                    and design my own, mainly to learn more about PCB design and embedded systems.
+                    I started out with a prototype breadboard, moved to an Arduino Nano PCB baseboard,
+                    and then finally created a custom STM32 PCB.
+                    I've also built an RC plane from scratch as a testbed for this FC. 
+                    More on that later...
+                </p>
+                
+                <p>
+                    This project was my first real experience with PCB design, and I'm sure 
+                    that my design is far from optimal. It was definitely challenging, but
+                    I really enjoyed the process.  
+                </p>
+                
+                <p>
+                    If you're interested in learning more about PCB design, I highly recommend
+                    checking out Phil's Lab tutorials on YouTube. 
                 </p>
 
-                
-                Pros:
+                <img src="images/shimmer_front.png" alt="Shimmer PCB Front" loading="lazy" style="max-width: 50%; height: auto;" />
 
+                <h2>Details</h2>
+                <p>
+                    "Shimmer" comes from a type of reverb effect that shares the same name. 
+                    I think it sounds cool, so I named the FC after it.
+                </p>
+
+                <h3>Prototype Development</h3>
+                <p>
+                    For an initial prototype, I used an Arduino Nano and an MPU6050 breakout board
+                    to measure orientation in degrees (roll, pitch, yaw). 
+                </p>
+                <p>
+                    The MPU6050 contains an accelerometer and a gyroscope. Although both of these can 
+                    measure orientation, they both have downfalls.  
+                    To correct for this, I used a complementary filter, which fuses the data from both.
+                </p>
+
+                <h3>Baseboard Design</h3>
+                <p>
+                    Once I had the prototype figured out, I designed a custom PCB "baseboard". This
+                    connects the Arduino and other modules together more securely and neatly. This method has many pros and cons.
+                </p>
+                
+                <p>Pros:</p>
                 <ul>
                     <li>Cheap, if you already have modules</li>
                     <li>Quick to design</li>
                     <li>Less prone to initial errors</li>
                     <li>Far simpler than a full PCB</li>
                 </ul>
-                <br>
 
-
-                Cons:
+                <p>Cons:</p>
                 <ul>
                     <li>Larger</li>
                     <li>Limited component choice and implementation</li>
@@ -435,41 +476,38 @@
                     <li>Less polished</li>
                 </ul>
 
-            </p>
+                <h3>V1.0 PCB Design</h3>
+                <p>
+                    Designing the first PCB was fairly straightforward. Wire everything up on a schematic,
+                    just like it was done on the breadboard, and then route the PCB. 
+                </p>
 
-            <h3>&gt; V1.0 PCB DESIGN_</h3>
-            <p>
-            Designing the first PCB was fairly straightforward. Wire everything up on a schematic,
-            just like it was done on the breadboard, and then route the PCB. 
+                <img src="images/shimmer_v1_sch.png" alt="V1.0 Schematic" loading="lazy" style="max-width: 80%; height: auto;"/>
 
-                <img src="images/shimmer_v1_sch.png" alt="Schematic" loading="lazy" />
+                <p>
+                    After the schematic was complete, I then layed out all of the components and routed them.
+                </p>
 
-            </p>
+                <img src="images/shimmer_v1_pcb.png" alt="V1.0 PCB Layout" loading="lazy" style="max-width: 50%; height: auto;" />
 
-            <p>
-                After the schematic was complete, I then layed out all of the components and routed them.
-                <img src="images/shimmer_v1_pcb.png" alt="v1 pcb" loading="lazy" />
+                <p>
+                    The 3D Render looks like this:
+                </p>
 
-            </p>
+                <img src="images/Shimmer_v1_front.png" alt="V1.0 3D Render" loading="lazy" style="max-width: 50%; height: auto;" />
 
-            <p>
-                The 3D Render looks like this:
-                <img src="images/Shimmer_v1_front.png" alt="v1 pcb" loading="lazy" />
-            </p>
+                <p>
+                    I ordered V1.0 PCBs through PCBWay, and assembled them once they arrived (no SD card module yet).
+                </p>
 
-            <p>
-                I ordered V1.0 PCBs through PCBWay, and should have them delivered soon.
+                <img src="images/shimmer_v1_assembled.jpeg" alt="V1.0 Assembled" loading="lazy" style="max-width: 50%; height: auto;" />
 
-                <br>
-                <br>
-                
-            </p>
-
-            <h3>&gt; V2.0 DESIGN_</h3>
-            <p>
-                After the V1.0 was complete, I then began designing V2.0.
-                 Shimmer contains the following components:
-                 <ul>
+                <h3>V2.0 Design</h3>
+                <p>
+                    After the V1.0 was complete, I then began designing V2.0.
+                    Shimmer contains the following components:
+                </p>
+                <ul>
                     <li>STMF103C8T6 Microcontroller (Brains)</li>
                     <li>MPU6050 Interial Measurement Unit (Orientation Sensor)</li>
                     <li>5V Voltage Regulator (Power Supply)</li>
@@ -478,40 +516,37 @@
                     <li>4 PWM Outputs for Controlling Servos / ESCs</li>
                     <li>UART, SPI, and SWD headers for additional communication</li>   
                     <li>Micro USB connector for programming and bench power</li>
+                </ul>
 
+                <h3>Schematic Design</h3>
+                <p>
+                    Once I had components selected and criteria defined, I created a schematic.
+                </p>
 
-                    
-                 </ul>
-            </p>
-
-            <h3>&gt; SCHEMATIC DESIGN_</h3>
-            <P>Once I had components selected and criteria defined, I created a 
-                schematic.
-
-                <img src="images/schm1.png" alt="Schematic 1" loading="lazy" />
+                <img src="images/schm1.png" alt="Schematic 1" loading="lazy" style="max-width: 50%; height: auto;" />
                 <div class="image-grid">
                     <img src="images/schm2.png" alt="Schematic 2" loading="lazy" />
                     <img src="images/schm4.png" alt="Schematic 3" loading="lazy" />
                     <img src="images/schm3.png" alt="Schematic 4" loading="lazy" />
                     <img src="images/schm5.png" alt="Schematic 5" loading="lazy" />
                 </div>
-            </P>
 
-            <h3>&gt; PCB LAYOUT_</h3>
-            <p>
-                Laying out and routing all of the traces for this PCB was super fun and rewarding.
-                After a few iterations, I landed on this: 
-                (The pink box in the middle is from my logo on the back silkscreen.)
+                <h3>PCB Layout</h3>
+                <p>
+                    Laying out and routing all of the traces for this PCB was super fun and rewarding.
+                    After a few iterations, I landed on this: 
+                    (The pink box in the middle is from my logo on the back silkscreen.)
+                </p>
 
-                <img src="images/shimmer_pcb.png" alt="pcb layout" loading="lazy" />
+                <img src="images/shimmer_pcb.png" alt="PCB Layout" loading="lazy" style="max-width: 50%; height: auto;" />
 
-                The MCU is positioned near the middle, with the decoupling capacitors and crystal
-                oscillator as close as possible. The IMU is right above. I included a switch to
-                put the MCU in boot mode which allows me to program it easily. 
+                <p>
+                    The MCU is positioned near the middle, with the decoupling capacitors and crystal
+                    oscillator as close as possible. The IMU is right above. I included a switch to
+                    put the MCU in boot mode which allows me to program it easily. 
+                </p>
 
-                <br>
-                <br>
-                Other important features include:
+                <p>Other important features include:</p>
                 <ul>
                     <li>
                         Power Switcher: U4 is an LM66200 Dual Ideal Diode with automatic switchover.
@@ -523,192 +558,41 @@
                     </li>
                 </ul>
 
-            </p>
+                <p>
+                    If I did this again, theres lots I would do different. I would use a ground plane on the top layer,
+                    as well as spend more time placing compoenents before routing traces.
+                </p>
 
-            <p>
-                That's all I've got so far for this project! I'm currently working on the firmware and 
-               a small plane to use as a test platform. Here's some cool renders of the front and back of the board.
+                <p>
+                    That's all I've got so far for this project! I'm currently working on the firmware and 
+                    a small plane to use as a test platform. Here's some cool renders of the front and back of the board.
+                </p>
 
-                    <img src="images/shimmer_front.png" alt="PCB Front" loading="lazy" />
-                    <img src="images/shimmer_back.png" alt="PCB Back" loading="lazy" />
-            </p>
+                <img src="images/shimmer_front.png" alt="PCB Front" loading="lazy" />
+                <img src="images/shimmer_back.png" alt="PCB Back" loading="lazy" />
 
-            <nav class="back-nav">
-                <a href="index.html">← BACK TO PORTFOLIO</a>
-            </nav>
+                <div class="back-nav">
+                    <a href="index.html">← Back to Portfolio</a>
+                </div>
 
-        </div>
+            </div>
+        </section>
     </main>
 
     <footer>
-        [ THANKS FOR VISITING ] - MATT
+        Thanks for visiting &nbsp;—&nbsp; Matt
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 
     <script>
-        // Starfield canvas animation
-        const canvas = document.getElementById('starfield');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const stars = [];
-        const numStars = 200;
-        const shootingStars = [];
-        let lastShootingStarTime = 0;
-        const shootingStarMinInterval = 5000;
-        const shootingStarMaxInterval = 15000;
-        let nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
-
-
-        class Star {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.z = Math.random() * 2;
-                this.size = Math.random() * 1.5;
-                this.speed = Math.random() * 0.2 + 0.1;
-                this.twinkleSpeed = Math.random() * 0.02 + 0.01;
-                this.twinkleDirection = Math.random() > 0.5 ? 1 : -1;
-                this.opacity = this.z;
-                this.isTwinkling = Math.random() > 0.7;
-            }
-
-            update() {
-                this.y += this.speed;
-
-                // Wrap around instead of resetting
-                if (this.y > canvas.height) {
-                    this.y = -10;
-                }
-                if (this.y < -10) {
-                    this.y = canvas.height;
-                }
-
-                // Twinkle effect
-                if (this.isTwinkling) {
-                    this.opacity += this.twinkleSpeed * this.twinkleDirection;
-                    if (this.opacity >= this.z || this.opacity <= 0.2) {
-                        this.twinkleDirection *= -1;
-                    }
-
-                    // Randomly stop twinkling
-                    if (Math.random() > 0.995) {
-                        this.isTwinkling = false;
-                        this.opacity = this.z;
-                    }
-                } else {
-                    // Randomly start twinkling
-                    if (Math.random() > 0.998) {
-                        this.isTwinkling = true;
-                    }
-                }
-            }
-
-            draw() {
-                ctx.fillStyle = `rgba(100, 255, 218, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        class ShootingStar {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = -Math.random() * canvas.width * 0.5;
-                this.y = Math.random() * canvas.height * 0.3;
-                this.length = Math.random() * 100 + 50;
-                this.speedX = Math.random() * 5 + 3;
-                this.speedY = Math.random() * 2 + 1;
-                this.opacity = 1;
-                this.brightness = Math.random() * 0.5 + 1.0;
-                this.color = `rgba(255, 255, 255, ${this.opacity})`;
-                this.fadeSpeed = 0.02;
-                this.active = true;
-            }
-
-            update() {
-                if (!this.active) return;
-
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width * 0.6) {
-                    this.opacity -= this.fadeSpeed;
-                    this.color = `rgba(255, 255, 255, ${Math.max(0, this.opacity)})`;
-                }
-
-                if (this.opacity <= 0) {
-                    this.active = false;
-                }
-            }
-
-            draw() {
-                if (!this.active) return;
-
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x - this.length * (this.speedX / (this.speedX + this.speedY)), this.y - this.length * (this.speedY / (this.speedX + this.speedY)));
-                ctx.strokeStyle = this.color;
-                ctx.lineWidth = 1.5;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-            }
-        }
-
-
-        for (let i = 0; i < numStars; i++) {
-            stars.push(new Star());
-        }
-
-        function animate(currentTime) {
-            ctx.fillStyle = 'rgba(10, 10, 15, 0.5)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            stars.forEach(star => {
-                star.update();
-                star.draw();
-            });
-
-            if (currentTime - lastShootingStarTime > nextShootingStarInterval) {
-                shootingStars.push(new ShootingStar());
-                lastShootingStarTime = currentTime;
-                nextShootingStarInterval = Math.random() * (shootingStarMaxInterval - shootingStarMinInterval) + shootingStarMinInterval;
-            }
-
-            for (let i = shootingStars.length - 1; i >= 0; i--) {
-                const sStar = shootingStars[i];
-                sStar.update();
-                sStar.draw();
-
-                if (!sStar.active) {
-                    shootingStars.splice(i, 1);
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        animate(0);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        // Scroll animations
+        // Scroll animations for fading in the main content wrapper
         const sections = document.querySelectorAll('section');
 
         const observerOptions = {
-            threshold: 0.2,
-            rootMargin: '0px 0px -100px 0px'
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -725,4 +609,3 @@
 </body>
 
 </html>
-
