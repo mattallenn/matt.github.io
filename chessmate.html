@@ -216,11 +216,13 @@
             text-align: left;
         }
 
-        /* Images */
-        .project-content img {
+        /* Images and Video */
+        .project-content > img, 
+        .project-content > video {
             width: 100%;
+            max-width: 100%;
             border-radius: 4px;
-            margin: 2.5rem 0;
+            margin: 2.5rem auto; /* Centered */
             display: block;
             border: 1px solid var(--border);
             background: var(--bg-card);
@@ -319,6 +321,11 @@
             .nav-separator {
                 font-size: 0.7rem;
             }
+            
+            .project-content > img, 
+            .project-content > video {
+                max-width: 100%; /* Fill screen on mobile */
+            }
 
             main {
                 padding: 0 1.25rem;
@@ -364,7 +371,15 @@
 
             <div class="project-content">
                 <h2>Overview</h2>
-                <img src="images/Chessmate.jpeg" alt="Chess Robot" loading="lazy" />
+                
+                <video autoplay loop muted playsinline>
+                    <source src="images/demo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>
+                    Demo video at 2X speed
+                </p>
+
                 <p>
                     I wanted to play online chess on a physical board, as well as against an AI. This project is still a work in progress, but here are the main goals I set out to achieve:
                 </p>
