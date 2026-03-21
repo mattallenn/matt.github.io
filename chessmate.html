@@ -216,13 +216,23 @@
             text-align: left;
         }
 
-        /* Images and Video */
-        .project-content > img, 
+        /* Video — full width */
         .project-content > video {
             width: 100%;
             max-width: 100%;
             border-radius: 4px;
-            margin: 2.5rem auto; /* Centered */
+            margin: 2.5rem auto;
+            display: block;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        /* Images — 75% width, centered */
+        .project-content > img {
+            width: 75%;
+            max-width: 75%;
+            border-radius: 4px;
+            margin: 2.5rem auto;
             display: block;
             border: 1px solid var(--border);
             background: var(--bg-card);
@@ -322,9 +332,14 @@
                 font-size: 0.7rem;
             }
             
-            .project-content > img, 
+            /* On mobile, images fill more of the screen */
+            .project-content > img {
+                width: 100%;
+                max-width: 100%;
+            }
+
             .project-content > video {
-                max-width: 100%; /* Fill screen on mobile */
+                max-width: 100%;
             }
 
             main {

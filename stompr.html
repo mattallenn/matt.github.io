@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Polaris Project | Matthew Allen Portfolio</title>
+    <title>STOMPR | Matthew Allen Portfolio</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
@@ -130,6 +130,17 @@
             z-index: 1;
         }
 
+                .project-content .disclaimer {
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--text-muted);
+            border-left: 2px solid var(--border);
+            padding: 1rem 1.5rem;
+            margin: 0 0 3rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 0 4px 4px 0;
+        }
+
         section {
             min-height: calc(100vh - 140px);
             display: flex;
@@ -167,15 +178,15 @@
             text-transform: uppercase;
         }
 
-        /* Section headings */
+        /* Section headings - Increased size as requested */
         h2 {
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             font-weight: 600;
             letter-spacing: 0.2em;
             color: var(--accent);
             text-transform: uppercase;
-            margin-top: 4rem;
-            margin-bottom: 2rem;
+            margin-top: 5rem;
+            margin-bottom: 2.5rem;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -186,6 +197,16 @@
             flex: 1;
             height: 1px;
             background: var(--border);
+        }
+
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         p,
@@ -207,22 +228,9 @@
             text-align: left;
         }
 
-        /* Style for the disclaimer */
-        .project-content .disclaimer {
-            font-size: 0.85rem;
-            font-style: italic;
-            color: var(--text-muted);
-            border-left: 2px solid var(--border);
-            padding: 1rem 1.5rem;
-            margin: 0 0 3rem 0;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 0 4px 4px 0;
-        }
-
         /* Images - Centered and smaller */
         .project-content img {
-            width: 100%;
-            max-width: 500px;
+            width: 75%;
             border-radius: 4px;
             margin: 2.5rem auto;
             /* Centered */
@@ -303,6 +311,10 @@
             h1 {
                 font-size: clamp(2rem, 8vw, 2.5rem);
             }
+            
+            h2 {
+                font-size: 1.25rem;
+            }
 
             .nav-wrapper {
                 top: auto;
@@ -327,8 +339,7 @@
             }
 
             .project-content img {
-                max-width: 100%;
-                /* Ensure images fill the screen on mobile */
+                max-width: 75%;
             }
 
             main {
@@ -370,128 +381,123 @@
 
     <main>
         <section>
-            <h1>POLARIS</h1>
-            <p class="subtitle">COLD-GAS THRUSTER SYSTEM</p>
+            <h1>STOMPR</h1>
+            <p class="subtitle">FOOTSWITCH MIDI CONTROLLER</p>
 
             <div class="project-content">
 
                 <p class="disclaimer">
-                    Disclaimer: This project is part of Purdue Orbital's GNC team. This is by no means a
-                    solo project. My specific contributions are detailed below.
-                </p>
+                    This project is a work in progress, but I figured I'd share it anyways.
+                    Currently, the initial PCB design is done, I've ordered the parts,
+                    and the firmware is working for the prototype (breadboarded). 
 
-                <h2>Overview</h2>
-                <img src="images/polaris-cad.jpg" alt="Polaris CAD Model" loading="lazy" />
-                <p>
-                    Polaris is a cold-gas thruster system designed to actively stabilize the launchpad just before
-                    launch,
-                    ensuring the platform remains secure and steady during critical moments. The system is built around
-                    an
-                    ESP32-based microcontroller. It also has a custom buck converter, sensors, data-logging, and
-                    MOSFETs.
+                    Next steps are to order and assemble the PCB, powerdercoat the enclosure, 
+                    assemble everything, and polish up the firmware. 
+                    This is probably my favorite project so far, and I'm super hyped about it.
+                    If I'm able to get the cost low enough, I might consider doing a small production
+                    run (10 - 20 units), and seeing if I can sell them.
                 </p>
-                <p>
-                    I led the development of the electronics and software. This includes selecting components, designing
-                    the PCB, writing the control software, and integrating the system with the rest of the 
-                    subsystems. I also contributed to testing and validation efforts, including ground tests and data
-                    analysis.
-                </p>
-
-                <h2>Details</h2>
-                <img src="images/hapsisV4.1_pcb.png" alt="Polaris hardware" loading="lazy" />
 
                 <p>
-                    The PCB design was completed in KiCAD, using a two-layer stackup. Ground planes were used on both
-                    layers, and
-                    stitched together with vias. The heart of the design is the ESP32 microcontroller, which interfaces
-                    via I2C with
-                    the IMU and barometer. Data is logged to a microSD card via SPI.
-                </p>
-                <p>
-                    One of the big challenges was designing the pyro channels in a safe and reliable way. There are four
-                    pyro channels, each with a low-side MOSFET for activation, and they're pulled down to ground with
-                    resistors. To monitor if the pyro is connected, a voltage divider is used to check for continuity.
+                    This project acts a MIDI controller to send commands to a DAW such as Reaper. Not only is this a
+                    great learning platform, but it lets you control parameters for plugins and effects such as:
+                    turning a digital effect on/off, controlling an expression pedal, etc.
                 </p>
 
-                <img src="images/hapsis4.1_pyro_schem.png" alt="Polaris Pyro Schematic" loading="lazy" />
+                <p>The project is broken into 3 parts:</p>
+                <ul>
+                    <li>Electronics (PCB, switches, potentiometers, etc)</li>
+                    <li>Software (USB Driver, Firmware)</li>
+                    <li>Mechanical (Enclosure, knobs, mounting)</li>
+                </ul>
 
-                <p>
-                    Another challenge was desinging a buck converter that would step a 14.8V 4S LiPo down to 12V to power
-                    the MCU and solenoids. Desining around a peak output current of 2A, I select the TPS56339 which ended
-                    up working great. The design was simulated using the TI Webench tool, which is super powerful and 
-                    lets you optimize the design for different parameters. A nice feature of this IC is that the 
-                    duty cycle can go up to 97%, meaning that the output will stay stable even as the 
-                    battery voltage drops to near 12V.
-                </p>
-
-                <img src="images/buck_converter_schem.png" alt="Buck Converter Schematic" loading="lazy" />
+                <br>
 
                 <p>
-                    Laying out the buck converter was a bit tricky, but I followed the datasheet recommendations and it 
-                    ended up working out great. I think using wide copper pours for the high-current paths, and keeping
-                    everything compact really helped with noise and stability. I also made sure to include plenty of vias to
-                    deal with heat and try to reduce the loop area. 
+                    Code, PCB files, and CAD files are all available on GitHub:
+
+                    <br>
+                    <a href="https://github.com/mattallenn/STM32-MIDI-Controller" target="_blank" rel="noopener noreferrer">
+                        https://github.com/mattallenn/STM32-MIDI-Controller
+                    </a>
                 </p>
 
+                <h2>Electronics</h2>
+                
+                <h3>PCB</h3>
+                <p>
+                    The heart of the electronics is a 4-layer PCB I designed in KiCad.
+                </p>
+                <p>
+                    The purpose of the board is to connect to the host computer via USB, and convert the switches and
+                    knob movements into MIDI commands that will be send the the host.
+                </p>
+                <p>
+                    This is achieved using an STM32F411RET6 MCU. I chose this primarily because I have the Nucleo
+                    Devboard with the same MCU, so it allowed me to protoype without risk of running into an unexpected
+                    firmware bug and having to order a second board. Also, I wanted to practice designing an MCU-based
+                    PCB and implement everything myself on the STM32 software stack. Setting up a USB driver like this
+                    is much different than including a library in Arduino.
+                </p>
 
-                <img src="images/buck_routing.png" alt="Buck Converter Routing" loading="lazy" />
+                <img src="Images/STOMPR_front.png" alt="PCB Front Render" loading="lazy" />
 
                 <p>
-                    After ordering the boards, I assembled them using soldering paste and a lot of patience.
-                    I didn't have a reflow oven or hot air plate, so I ended used using my stove with a pan and a
-                    block of aluminum as a makeshift hot plate. Using a therometer to keep track of the temp, I was
-                    able to match the manufacturers reflow profile pretty closely. This method worked great for me.
-                    
+                    I definitely could have achieved this layout with a 2-layer board, but I wanted to practice with 4
+                    layers. My stackup was SIG/GND - GND - PWR - SIG/GND. I've read online that SIG/GND - GND - GND -
+                    SIG/GND is <i>slightly</i> better for EMI reasons, but :shrug:. Either way, it doesn't matter for my
+                    uses here.
                 </p>
-
-                <img src="images/polaris_soldered.jpeg" alt="Polaris Soldered" loading="lazy" />
-
                 <p>
-                Before we had this fancy PCB, we did all our testing on a perfboard with quesionable wiring. This worked great
-                for quick iterations and software development, but having a custom PCB is a game changer.
-
-                Here's a graph of some of our early testing data. We spun the system up by hand and observed the response.
+                    Also, I added a copper ring around the outside of the board. This really makes no different afaik,
+                    but it looks cool and I saw it in some other designs. There's quite a few things in this board that
+                    are likely sub-optimal for a production run, but I was having a lot of fun experimenting with
+                    techniques and trying new things.
                 </p>
-
-
-                <img src="images/graph.png" alt="PID Tuning Graph" loading="lazy" />
-
-                <pre><code class="language-c">
-  unsigned long currentTime = millis();
-
-  // Consistent 100Hz loop for state management and control
-  // Non-blocking
-  if (currentTime >= lastLoopTime + LOOP_PERIOD) {
-    unsigned long deltaMs = currentTime - lastLoopTime;
-    lastLoopTime = currentTime;
-    float deltaT = deltaMs / 1000.0; 
-
-    // Read sensor data
-    float temperature, pressure, altitude;
-    float roll, pitch, heading, vertical_accel;
-    readBarometer(temperature, pressure, altitude);
-    readIMU(roll, pitch, heading, vertical_accel);
-
-    // Log data
-    if (currentTime >= lastLogTime + LOG_PERIOD) {
-      logData(currentTime, temperature, pressure,
-         altitude, roll, pitch, heading, vertical_accel,
-          leftThrusterOn, rightThrusterOn, currentState);
-      lastLogTime = currentTime;
-    }
-                </code></pre>
-
                 <p>
-                    The code above shows the main control loop, using non-blocking timing to keep track of state, log data, and
-                    calculate control outputs. All of these parameters are tunable in a config file, which makes adjusting the system
-                    easy and safe.
+                    I added some unnecessary feautures on this board such as programmable SMD LEDs and headers for
+                    unnused GPIO. This won't be accessible when inside of the enclosure, but I'm ordering 5 PCBs, so I
+                    can hopefully use the excess boards for different projects.
                 </p>
 
-                <p>With the new PCB, we were able to record lots more data, such as altitude, pressure,
-                    roll, pitch, yaw, acceleration, and more. The data recorded from a bench test is shown below.
-                </p>
+                <img src="Images/STOMPR_back.png" alt="PCB Back Render" loading="lazy" />
 
-                <img src="images/flight_log_7.png" alt="Flight Log 7" loading="lazy" style="max-width: 100%; height: auto;" />
+                <h3>Switches & Knobs</h3>
+                <p>
+                    To stay flexible and keep the PCB size under 100x100mm (cheaper from the fab), I'm just soldering
+                    wires to the pots and switches, and using JST connectors on the PCB.
+                </p>
+                <p>
+                    I ordered the switches, pots, and a power LED from <a href="https://lovemyswitches.com/">lovemyswitches.com</a>.
+                    They've been super helpful and the prices were more than reasonable.
+                </p>
+                <p>The specific components I got:</p>
+                <ul>
+                    <li>Pots x4 (10k Ohm, Linear)</li>
+                    <li>Switches x4</li>
+                    <li>LED x1</li>
+                </ul>
+
+                <h2>Software</h2>
+                <p>
+                    All of the software is written using STM's CubeMX for initial code generation (pinout, clock
+                    configuration, etc) and CubeIDE for writing, flashing, and debugging the C code.
+                </p>
+                <p>
+                    One the trickiest parts of this project has been getting the USB driver to work. I was able to get
+                    the STM32 to show up as a virtual COM port and a CDC device fairly easily, but getting it to work
+                    as a direct MIDI device has not been easy. As of now, I'm using it as virtual COM port and sending
+                    the commands through that. On the host computer, I have a python script that "translates" that data
+                    into MIDI commands. Hopefully I can get the direct MIDI communication working soon, though.
+                </p>
+                <p>
+                    Other than that, it's pretty straightforward. The switches are mapped to GPIO input pins, and the
+                    pots are mapped to ADC pins. Based on their values and a bit of state logic, CC (controla change)
+                    and PC (program change) MIDI messages are sent to the host device.
+                </p>
+                <p>
+                    Phil's Lab series of STM32 USB tutorials were immensely helpful.
+                </p>
 
 
                 <div class="back-nav">
@@ -507,10 +513,9 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
 
     <script>
-        // Scroll animations for fading in the main content wrapper
         const sections = document.querySelectorAll('section');
 
         const observerOptions = {
