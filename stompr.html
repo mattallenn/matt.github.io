@@ -449,7 +449,7 @@
                     uses here.
                 </p>
                 <p>
-                    Also, I added a copper ring around the outside of the board. This really makes no different afaik,
+                    Also, I added a copper ring around the outside of the board. This really makes no different afaik (I don't have edge plating),
                     but it looks cool and I saw it in some other designs. There's quite a few things in this board that
                     are likely sub-optimal for a production run, but I was having a lot of fun experimenting with
                     techniques and trying new things.
@@ -484,11 +484,8 @@
                     configuration, etc) and CubeIDE for writing, flashing, and debugging the C code.
                 </p>
                 <p>
-                    One the trickiest parts of this project has been getting the USB driver to work. I was able to get
-                    the STM32 to show up as a virtual COM port and a CDC device fairly easily, but getting it to work
-                    as a direct MIDI device has not been easy. As of now, I'm using it as virtual COM port and sending
-                    the commands through that. On the host computer, I have a python script that "translates" that data
-                    into MIDI commands. Hopefully I can get the direct MIDI communication working soon, though.
+                    The USB MIDI Driver is implemented using tinyUSB. I definitely recommend trying tinyUSB out if you're working on a similar project. There is some manual setup required,
+                    like creating the USB Descriptor and configuring a few settings.
                 </p>
                 <p>
                     Other than that, it's pretty straightforward. The switches are mapped to GPIO input pins, and the
