@@ -46,7 +46,6 @@
             position: relative;
         }
 
-        /* Subtle grain texture overlay */
         body::before {
             content: '';
             position: fixed;
@@ -57,7 +56,6 @@
             opacity: 0.4;
         }
 
-        /* Ambient gradient */
         body::after {
             content: '';
             position: fixed;
@@ -70,7 +68,6 @@
             z-index: 0;
         }
 
-        /* Retro Apple Rainbow Stripe */
         .rainbow-stripe {
             position: fixed;
             top: 0;
@@ -95,7 +92,6 @@
             transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
         }
 
-        /* Navigation */
         .nav-wrapper {
             position: fixed;
             top: 24px;
@@ -130,7 +126,6 @@
             text-transform: uppercase;
         }
 
-        /* Nav Micro-Interaction */
         nav a:hover, nav a.active {
             color: var(--text);
             transform: translateY(-2px);
@@ -167,7 +162,6 @@
             transform: translateY(0);
         }
 
-        /* Hero section - Left Aligned */
         #home {
             gap: 1rem;
             align-items: flex-start;
@@ -181,14 +175,14 @@
             color: var(--text);
             min-height: 1.2em;
             line-height: 1.1;
-            margin-left: -2px; /* Optical alignment */
+            margin-left: -2px;
         }
 
         .terminal-cursor {
             display: inline-block;
             width: 3px;
             height: 0.85em;
-            background-color: var(--apple-green); /* Integrated Apple Green */
+            background-color: var(--apple-green);
             margin-left: 4px;
             animation: blink 1s step-end infinite;
             vertical-align: middle;
@@ -210,7 +204,6 @@
             text-align: left;
         }
 
-        /* Section headings */
         h2 {
             font-size: 1.1rem;
             font-weight: 600;
@@ -239,6 +232,11 @@
             margin-top: 2rem;
         }
 
+        /* Featured card spans full width */
+        .project-card.featured {
+            grid-column: 1 / -1;
+        }
+
         .project-card {
             background: var(--bg-card);
             padding: 1.5rem;
@@ -251,7 +249,6 @@
             overflow: hidden;
         }
 
-        /* Project Card Hover - Integrated Apple Blue */
         .project-card:hover {
             transform: translateY(-10px);
             border-color: var(--apple-blue);
@@ -259,7 +256,8 @@
             box-shadow: 0 10px 30px rgba(0, 164, 228, 0.1); 
         }
 
-        .project-card img {
+        /* Single image (non-featured cards) */
+        .project-card:not(.featured) img {
             width: 100%;
             border-radius: 5px;
             margin-bottom: 1rem;
@@ -268,6 +266,28 @@
         }
 
         .project-card:hover img {
+            opacity: 0.9;
+            border-color: rgba(0, 164, 228, 0.3);
+        }
+
+        /* Featured card image row — two images side by side */
+        .featured-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .featured-images img {
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
+        }
+
+        .project-card:hover .featured-images img {
             opacity: 0.9;
             border-color: rgba(0, 164, 228, 0.3);
         }
@@ -292,7 +312,6 @@
             line-height: 1.7;
         }
 
-        /* Arrow indicator on cards */
         .project-card::after {
             content: '↗';
             position: absolute;
@@ -305,7 +324,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Arrow Slide Interaction */
         .project-card:hover::after {
             opacity: 1;
             color: var(--apple-blue);
@@ -325,7 +343,7 @@
             padding: 1rem 1.25rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-left: 3px solid transparent; /* Preparing for the hover interaction */
+            border-left: 3px solid transparent;
             border-radius: 4px;
             font-size: 0.9rem;
             font-weight: 400;
@@ -334,16 +352,14 @@
             transition: all 0.25s ease;
         }
 
-        /* Hobbies Hover - Integrated Apple Orange */
         .hobbies-list li:hover {
             border-color: var(--border);
             border-left-color: var(--apple-orange);
             color: var(--text);
-            padding-left: 1.75rem; /* Slide text right */
+            padding-left: 1.75rem;
             background: rgba(14, 14, 20, 0.95);
         }
 
-        /* About */
         #about p {
             font-size: 1rem;
             color: var(--text-muted);
@@ -356,7 +372,6 @@
             font-weight: 500;
         }
 
-        /* Contact */
         .contact-info {
             font-size: 0.9rem;
             line-height: 2.8;
@@ -369,7 +384,6 @@
             transition: all 0.2s ease;
         }
 
-        /* Contact Hover - Integrated Apple Purple */
         .contact-info a:hover {
             opacity: 1;
             color: var(--apple-purple);
@@ -397,7 +411,6 @@
             z-index: 1;
         }
 
-        /* GitHub corner */
         .github-corner {
             position: fixed;
             top: 0;
@@ -411,12 +424,10 @@
             opacity: 0.9;
         }
 
-        /* Flipping the SVG */
         .github-corner svg {
             transform: scaleX(-1);
         }
 
-        /* Mobile */
         @media (max-width: 768px) {
             h1 {
                 font-size: clamp(2rem, 8vw, 2.5rem);
@@ -445,6 +456,10 @@
             }
 
             .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-images {
                 grid-template-columns: 1fr;
             }
 
@@ -504,7 +519,21 @@
         <section id="projects" aria-label="Projects">
             <h2>Projects</h2>
             <div class="projects-grid">
-                
+
+                <!-- STOMPR — featured, full-width, two images -->
+                <a href="stompr.html" class="project-card featured" aria-label="STOMPR">
+                    <div class="featured-images">
+                        <img src="images/stompr_physical.jpeg" alt="STOMPR front view" loading="lazy" />
+                        <img src="images/stompr_final.jpeg" alt="STOMPR detail view" loading="lazy" />
+                    </div>
+                    <h3 class="project-title">STOMPR — MIDI CONTROLLER</h3>
+                    <p>
+                        USB MIDI-Class compliant foot controller designed to control digital guitar effects, DAW parameters, loopers, or whatever your
+                        heart desires! All running on a custom STM32F411 based PCB with an aluminum enclosure and C firmware. Featuring a tinyUSB MIDI stack, the controller
+                        is "plug-and-play" with no additional drivers needed. 
+                    </p>
+                </a>
+
                 <a href="polaris.html" class="project-card" aria-label="Polaris">
                     <img src="images/hapsisV4.1_pcb.png" alt="Polaris launchpad" loading="lazy" />
                     <h3 class="project-title">POLARIS — ACTIVELY STABILIZED LAUNCHPAD</h3>
@@ -530,16 +559,6 @@
                     </p>
                 </a>
 
-
-                <a href="stompr.html" class="project-card" aria-label="STOMPR">
-                    <img src="images/STOMPR_front.png" alt="STROMPR - MIDI Foot Controller" loading="lazy" />
-                    <h3 class="project-title">STOMPR — MIDI CONTROLLER</h3>
-                    <p>
-                        MIDI foot controller built to control digital guitar effects, synths, loopers, etc.
-                        Custom PCB, USB MIDI firmware, 3D-printed parts, and more.
-                    </p>
-                </a>
-                
                 <a href="shimmer.html" class="project-card" aria-label="Shimmer">
                     <img src="images/shimmer_front.png" alt="Shimmer Flight Controller PCB" loading="lazy" />
                     <h3 class="project-title">SHIMMER — FLIGHT CONTROLLER PCB</h3>
@@ -547,7 +566,6 @@
                         Custom STM32-based flight controller designed to stabilize RC planes and drones. Built in KiCad, it receives controller inputs, processes sensor data for stabilization, and outputs PWM to servos or ESCs.
                     </p>
                 </a>
-
 
                 <a href="drum-riser.html" class="project-card" aria-label="Drum Riser">
                     <img src="images/drum-riser.jpeg" alt="Drum Riser" loading="lazy" />
@@ -600,7 +618,6 @@
     </footer>
 
     <script>
-        // Typing effect
         const nameElement = document.getElementById('typed-name');
         const nameText = 'Matthew Allen';
         let charIndex = 0;
@@ -629,7 +646,6 @@
             setTimeout(typeWriter, 400);
         }, 300);
 
-        // IntersectionObserver for scroll animations + nav highlighting
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('nav a');
 

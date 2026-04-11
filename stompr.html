@@ -387,21 +387,23 @@
             <div class="project-content">
 
                 <p class="disclaimer">
-                    This project is a work in progress, but I figured I'd share it anyways.
-                    Currently, the initial PCB design is done, I've ordered the parts,
-                    and the firmware is working for the prototype (breadboarded). 
+                    Other than powerdercoating and some painting, this project is finished! Definitely my favorite project I've done so far, and I'm really happy with how everything 
+                    came together. This project encompassed a lot of different skills and techniques, spanning from circuit design all the way to 3D printing and (soon) powerdercoating.
+                    If anyone is interested in buying one of these, I might consider doing a small batch run, so please reach out! It's not the most
+                    feature rich MIDI controller out there, but it's incredibly solid and reliable. 
 
-                    Next steps are to order and assemble the PCB, powerdercoat the enclosure, 
-                    assemble everything, and polish up the firmware. 
-                    This is probably my favorite project so far, and I'm super hyped about it.
-                    If I'm able to get the cost low enough, I might consider doing a small production
-                    run (10 - 20 units), and seeing if I can sell them.
+
                 </p>
-
+                
+                <img src="images/stompr_final.jpeg" alt="PCB Front Render" loading="lazy" />
                 <p>
-                    This project acts a MIDI controller to send commands to a DAW such as Reaper. Not only is this a
+                    STOMPR acts as a MIDI controller to send commands to a DAW such as Reaper. Not only is this a
                     great learning platform, but it lets you control parameters for plugins and effects such as:
                     turning a digital effect on/off, controlling an expression pedal, etc.
+                </p>
+                <p>
+                    It's fully USB MIDI-Class complaint, so it should work with any modern DAW or software that has native MIDI support. I've 
+                    been using it primarily to control my Neural DSP Archetype Gojira plugin in Reaper, and it works flawlessly.
                 </p>
 
                 <p>The project is broken into 3 parts:</p>
@@ -437,7 +439,7 @@
                     Devboard with the same MCU, so it allowed me to protoype without risk of running into an unexpected
                     firmware bug and having to order a second board. Also, I wanted to practice designing an MCU-based
                     PCB and implement everything myself on the STM32 software stack. Setting up a USB driver like this
-                    is much different than including a library in Arduino.
+                    is much more involved than simply including a library in Arduino.
                 </p>
 
                 <img src="images/STOMPR_front.png" alt="PCB Front Render" loading="lazy" />
@@ -449,7 +451,7 @@
                     uses here.
                 </p>
                 <p>
-                    Also, I added a copper ring around the outside of the board. This really makes no different afaik (I don't have edge plating),
+                    Also, I added a copper ring around the outside of the board. This really makes no difference afaik (I don't have edge plating),
                     but it looks cool and I saw it in some other designs. There's quite a few things in this board that
                     are likely sub-optimal for a production run, but I was having a lot of fun experimenting with
                     techniques and trying new things.
@@ -462,11 +464,53 @@
 
                 <img src="images/STOMPR_back.png" alt="PCB Back Render" loading="lazy" />
 
+                <h3>Schematic</h3>
+
+                <img src="images/f411_shimmer.svg" alt="PCB Back Render" loading="lazy" />
+                
+                <p>
+                    The schematic consists of a few main sections: MCU, Power Supply, and some additional circuitry.
+
+                    The STM32 is powered by the 3.3V rail, which is stepped down from the USB's 5V using an AMS1117 regulator. There are decoupling
+                    capacitors placed on all of the VDD pins on the STM32.
+                </p>
+                    
+                <p>
+                    The only major error I made on this design was forgetting to add the VCAP pin capacitor. This connects to the internal voltage regulator
+                    that is inside of the STM32. Without this capacitor, the board will never turn on. Unfortunately, I realized this mistake after the boards
+                    had already been sent to the fab, so I had to get a bit creative to fix it. (more on this later)
+
+                    </p>
+                    <p>
+                    Truthfully, I'm not sure how I overlooked this. It's a critical part of the design, and clearly listed in the datasheet, application notes, 
+                    and reference designs. Previous STM32 designs I have done used the STM32F103 chip, which is less powerful and does not have a VCAP pin at all.
+                    On the bright side, I will (hopefully) never make this mistake again!
+                </p>
+
+
+                <h3>VCAP Bodge</h3>
+                <p>
+                    To fix the missing VCAP capacitor, I soldered a 4.7uF capacitor onto the board. I shared the ground with a nearby decoupling capacitor, and used
+                    <i>tiny</i> strand of wire to connect the VCAP pin to the positive end of the capacitor. It's not pretty by any means, but it works.
+                    This was a major pain to solder, but I was able to get it done with the help of a a lot of flux and patience.
+                </p>
+
+                <img src="images/stompr_bodge.jpeg" alt="VCAP Bodge" loading="lazy" />
+
+                <p>
+                    Speaking of soldering, I'll admit that this PCB isn't super great. I didn't order a stencil, which made getting the LQFP chip
+                    soldered much more difficult. I applied the solder paste by hand, and the distribution was not very even. There's lot's of 
+                    flux residue on the board, but I haven't bothered to clean it off since I'm scareed I'll break off the bodged VCAP wire.
+                </p>
+
                 <h3>Switches & Knobs</h3>
                 <p>
                     To stay flexible and keep the PCB size under 100x100mm (cheaper from the fab), I'm just soldering
-                    wires to the pots and switches, and using JST connectors on the PCB.
+                    wires to the pots and switches, and using JST connectors on the PCB. One of the most relaxing parts of this project was soldering up all of the
+                    JST wires to the pots and switches. I wrapped everything in heat shrink and I think it looks quite clean.
+
                 </p>
+                <img src="images/stompr_wiring.jpeg"alt="VCAP Bodge" loading="lazy" />
                 <p>
                     I ordered the switches, pots, and a power LED from <a href="https://lovemyswitches.com/">lovemyswitches.com</a>.
                     They've been super helpful and the prices were more than reasonable.
@@ -489,12 +533,61 @@
                 </p>
                 <p>
                     Other than that, it's pretty straightforward. The switches are mapped to GPIO input pins, and the
-                    pots are mapped to ADC pins. Based on their values and a bit of state logic, CC (controla change)
+                    pots are mapped to ADC pins. Based on their values and a bit of state logic, CC (control change)
                     and PC (program change) MIDI messages are sent to the host device.
                 </p>
                 <p>
-                    Phil's Lab series of STM32 USB tutorials were immensely helpful.
+                    To create the MIDI packets, I'm using a struct based on the USB MIDI specification. 
                 </p>
+                    
+                <p>
+                    Currently, I have the knobs mapped to send CC messages, and the switches are split between CC and PC messages.
+                    In the specific plugin I'm using (Neural DSP Archetype Gojira), the CC messages used to control things such as 
+                    gain, volume, turning an effect on/off, etc. The PC (program change) messages are used to switch between presets.
+                </p>
+<!-- HTML generated using hilite.me --><div style="background: #282a36; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .1em;padding:.2em .2em;"><pre style="margin: 0; line-height: 125%;"><span></span><span style="color: #F8F8F2">     </span><span style="color: #6272A4">// Maps adc channel to cc num</span>
+<span style="color: #F8F8F2">      </span><span style="color: #FF79C6">static</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">const</span><span style="color: #F8F8F2"> </span><span style="color: #8BE9FD">uint8_t</span><span style="color: #F8F8F2"> adc_cc_nums[NUM_ADC_CHANNELS] </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> {</span>
+<span style="color: #F8F8F2">                  ADC0_CC_NUM, ADC1_CC_NUM, ADC2_CC_NUM, ADC3_CC_NUM</span>
+<span style="color: #F8F8F2">              };</span>
+
+
+<span style="color: #F8F8F2">      </span><span style="color: #FF79C6">for</span><span style="color: #F8F8F2"> (</span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2"> i </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> </span><span style="color: #FFB86C">0</span><span style="color: #F8F8F2">; i </span><span style="color: #FF79C6">&lt;</span><span style="color: #F8F8F2"> NUM_ADC_CHANNELS; i</span><span style="color: #FF79C6">++</span><span style="color: #F8F8F2">) {</span>
+<span style="color: #F8F8F2">    	  </span>
+<span style="color: #F8F8F2">          </span><span style="color: #8BE9FD">uint8_t</span><span style="color: #F8F8F2"> cc_val </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> (</span><span style="color: #8BE9FD">uint8_t</span><span style="color: #F8F8F2">)(((</span><span style="color: #8BE9FD">uint32_t</span><span style="color: #F8F8F2">)adc_buf[i] </span><span style="color: #FF79C6">*</span><span style="color: #F8F8F2"> </span><span style="color: #FFB86C">127</span><span style="color: #F8F8F2">) </span><span style="color: #FF79C6">/</span><span style="color: #F8F8F2"> </span><span style="color: #FFB86C">4095</span><span style="color: #F8F8F2">);</span>
+
+<span style="color: #F8F8F2">          </span><span style="color: #6272A4">// Box filter: only send if change exceeds threshold.</span>
+<span style="color: #F8F8F2">          </span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2"> delta </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> (</span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">)cc_val </span><span style="color: #FF79C6">-</span><span style="color: #F8F8F2"> (</span><span style="color: #8BE9FD">int</span><span style="color: #F8F8F2">)last_adc_cc[i];</span>
+<span style="color: #F8F8F2">          </span><span style="color: #FF79C6">if</span><span style="color: #F8F8F2"> (delta </span><span style="color: #FF79C6">&lt;</span><span style="color: #F8F8F2"> </span><span style="color: #FFB86C">0</span><span style="color: #F8F8F2">) delta </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> </span><span style="color: #FF79C6">-</span><span style="color: #F8F8F2">delta;</span>
+
+<span style="color: #F8F8F2">          </span><span style="color: #FF79C6">if</span><span style="color: #F8F8F2"> (delta </span><span style="color: #FF79C6">&gt;</span><span style="color: #F8F8F2"> ADC_CC_THRESHOLD) {</span>
+<span style="color: #F8F8F2">              last_adc_cc[i] </span><span style="color: #FF79C6">=</span><span style="color: #F8F8F2"> cc_val;</span>
+<span style="color: #F8F8F2">              MIDI_SendCC(adc_cc_nums[i], cc_val);</span>
+<span style="color: #F8F8F2">          }</span>
+<span style="color: #F8F8F2">      }</span>
+</pre></div>
+
+                <p>
+                    This code scales scales down the 12-bit ADC value to the 7-bit CC range, and only sends a MIDI message if the
+                    change exceeds an adjustable threshold. This prevents the MIDI channel from constantly spamming messages when
+                    noise or minor fluctions occur on the ADC readings.
+                </p>
+                <h3>Resources & References</h3>
+                <p>
+                    Without the help of YouTube University and a bunch of online resources, there's no way I would have been
+                    able to figure this out! Here are some of the resource I used during this project:
+
+                </p>
+
+                <ul>
+                    <li>Phil's Lab Series of STM32 USB Tutorials</li>
+                    <li>Phil's Lab STM32 Design Videos</li>
+                    <li>tinyUSB Documentation</li>
+                    <li>STM32F411 Datasheet</li>
+                    <li>STM32F411 Application Note</li>
+                    <li>STM32F411 Reference Design</li>
+                    <li>STM32 Nucleo Schematic</li>
+                    <li>STM32 "BlackPill" Schematic</li>
+                </ul>
 
 
                 <div class="back-nav">
